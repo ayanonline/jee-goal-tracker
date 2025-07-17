@@ -328,33 +328,48 @@ async function deleteGoal(goalId) {
 
 // Load history summary
 async function loadHistory() {
-    if (!currentUser) return;
+    if (!currentUser || !currentUser.uid) {
+        console.error('User not authenticated');
+        return;
+    }
+    
+    const historyContainer = document.getElementById('historyGoals');
+    if (!historyContainer) {
+        console.error('History container not found');
+        return;
+    }
     
     try {
-        // Get all goals for the current user, ordered by date
-        const snapshot = await db.collection('goals')
+        // First, get all goals for the user (this only requires a single-field index on 'userId')
+        const querySnapshot = await db.collection('goals')
             .where('userId', '==', currentUser.uid)
-            .orderBy('date', 'desc')
             .get();
-        
-        const historySummary = {};
-        
-        // Group goals by date
-        snapshot.forEach(doc => {
-            const goal = doc.data();
-            if (!historySummary[goal.date]) {
-                historySummary[goal.date] = {
-                    totalGoals: 0,
-                    completedGoals: 0,
-                    totalTime: 0
-                };
-            }
             
-            historySummary[goal.date].totalGoals++;
-            historySummary[goal.date].totalTime += goal.time || 0;
-            if (goal.completed) {
-                historySummary[goal.date].completedGoals++;
+        const goalsByDate = {};
+        
+        // Process and group goals by date
+        querySnapshot.forEach(doc => {
+            if (doc.exists) {
+                const data = doc.data();
+                const date = data.date;
+                
+                if (!goalsByDate[date]) {
+                    goalsByDate[date] = [];
+                }
+                
+                goalsByDate[date].push({
+                    id: doc.id,
+                    ...data
+                });
             }
+        });
+        
+        // Sort the dates in descending order (newest first)
+        const sortedDates = Object.keys(goalsByDate).sort((a, b) => new Date(b) - new Date(a));
+        
+        // Sort goals within each date by timestamp (newest first)
+        sortedDates.forEach(date => {
+            goalsByDate[date].sort((a, b) => (b.timestamp?.toDate?.() || 0) - (a.timestamp?.toDate?.() || 0));
         });
         
         // Update the history section if needed

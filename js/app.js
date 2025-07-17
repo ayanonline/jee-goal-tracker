@@ -428,8 +428,9 @@ async function loadHistory() {
             });
             
         const goalsByDate = {};
+        const historySummary = {}; // Initialize historySummary object
         
-        // Process and group goals by date
+        // First pass: Group goals by date and calculate summary
         querySnapshot.forEach(doc => {
             try {
                 if (doc.exists) {
@@ -442,34 +443,11 @@ async function loadHistory() {
                     
                     const date = data.date;
                     
+                    // Initialize date entry in both objects if it doesn't exist
                     if (!goalsByDate[date]) {
                         goalsByDate[date] = [];
                     }
                     
-                    goalsByDate[date].push({
-                        id: doc.id,
-                        ...data
-                    });
-                }
-            } catch (error) {
-                console.error('Error processing document:', doc?.id, error);
-            }
-        });
-        
-        // Update the history section if needed
-        if (historyContainer) {
-            let historyHTML = '<h2>History</h2>';
-            
-            if (Object.keys(goalsByDate).length === 0) {
-                historyHTML += '<p>No history available yet. Add some goals to get started!</p>';
-            } else {
-                historyHTML += '<div class="history-grid">';
-                
-                // Create a summary of goals by date
-                const historySummary = {};
-                
-                // Calculate summary for each date
-                for (const [date, goals] of Object.entries(goalsByDate)) {
                     if (!historySummary[date]) {
                         historySummary[date] = {
                             totalGoals: 0,
@@ -478,61 +456,68 @@ async function loadHistory() {
                         };
                     }
                     
-                    goals.forEach(goal => {
-                        historySummary[date].totalGoals++;
-                        if (goal.completed) {
-                            historySummary[date].completedGoals++;
-                        }
-                        if (goal.time) {
-                            historySummary[date].totalTime += parseInt(goal.time) || 0;
-                        }
+                    // Add to goals by date
+                    goalsByDate[date].push({
+                        id: doc.id,
+                        ...data
                     });
-                }
-                
-                // Generate history HTML
-                for (const [date, data] of Object.entries(historySummary)) {
-                    const completionPercentage = Math.round((data.completedGoals / data.totalGoals) * 100) || 0;
                     
-                    historyHTML += `
-                        <div class="history-card">
-                            <div class="history-date">${formatDate(date)}</div>
-                            <div class="progress-bar">
-                                <div class="progress" style="width: ${completionPercentage}%"></div>
-                            </div>
-                            <div class="history-stats">
-                                <span>${data.completedGoals}/${data.totalGoals} goals</span>
-                                <span>${Math.round(data.totalTime / 60)} hours</span>
-                            </div>
-                        </div>
-                    `;
+                    // Update summary
+                    historySummary[date].totalGoals++;
+                    if (data.completed) {
+                        historySummary[date].completedGoals++;
+                    }
+                    if (data.time) {
+                        historySummary[date].totalTime += parseInt(data.time) || 0;
+                    }
                 }
-                
-                historyHTML += '</div>';
-            }
-            
-            historyContainer.innerHTML = historyHTML;
-        }
-        
-        // Sort the dates in descending order (newest first)
-        const sortedDates = Object.keys(goalsByDate).sort((a, b) => new Date(b) - new Date(a));
-        
-        // Sort goals within each date by timestamp (newest first)
-        sortedDates.forEach(date => {
-            if (goalsByDate[date]) {
-                goalsByDate[date].sort((a, b) => {
-                    const timeA = a.timestamp?.toDate?.() || 0;
-                    const timeB = b.timestamp?.toDate?.() || 0;
-                    return timeB - timeA;
-                });
+            } catch (error) {
+                console.error('Error processing document:', doc?.id, error);
             }
         });
         
-        // Update the history section if needed
-        // This can be expanded to show a summary chart or list of past dates
-        console.log('History summary:', historySummary);
+        // Generate history HTML
+        let historyHTML = '<h2>History</h2>';
+        
+        if (Object.keys(historySummary).length === 0) {
+            historyHTML += '<p>No history available yet. Add some goals to get started!</p>';
+        } else {
+            historyHTML += '<div class="history-grid">';
+            
+            // Sort dates in descending order (newest first)
+            const sortedDates = Object.keys(historySummary).sort((a, b) => new Date(b) - new Date(a));
+            
+            // Generate history cards
+            for (const date of sortedDates) {
+                const data = historySummary[date];
+                const completionPercentage = Math.round((data.completedGoals / data.totalGoals) * 100) || 0;
+                
+                historyHTML += `
+                    <div class="history-card">
+                        <div class="history-date">${formatDate(date)}</div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: ${completionPercentage}%"></div>
+                        </div>
+                        <div class="history-stats">
+                            <span>${data.completedGoals}/${data.totalGoals} goals</span>
+                            <span>${Math.round(data.totalTime / 60)} hours</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            historyHTML += '</div>';
+        }
+        
+        // Update the history container
+        historyContainer.innerHTML = historyHTML;
+        
+        // Log success
+        console.log('History loaded successfully');
         
     } catch (error) {
         console.error('Error loading history:', error);
+        showMessage('Failed to load history. Please try again.', 'error');
     }
 }
 

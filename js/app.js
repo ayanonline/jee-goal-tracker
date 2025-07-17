@@ -274,7 +274,6 @@ function createGoalElement(goal, isToday) {
 // Toggle goal completion status
 async function toggleComplete(goalId, button) {
     if (!currentUser) {
-        console.log('No user signed in');
         return;
     }
     
@@ -284,37 +283,50 @@ async function toggleComplete(goalId, button) {
     }
     
     try {
-        const goalRef = db.collection('goals').doc(goalId);
-        const doc = await goalRef.get();
-        
-        if (!doc.exists) {
-            console.error('No such document!');
-            return;
+        // Get the goal element
+        const goalElement = button.closest('.goal-card');
+        if (!goalElement) {
+            throw new Error('Could not find goal element');
         }
         
-        const currentStatus = doc.data().completed || false;
+        // Get the icon element
+        const icon = button.querySelector('i');
+        if (!icon) {
+            throw new Error('Could not find icon element');
+        }
+        
+        // Determine the current state and toggle it
+        const isCompleted = icon.classList.contains('fa-check');
+        const newCompletedState = !isCompleted;
+        
+        // Update the UI immediately for better UX
+        icon.className = `fas ${newCompletedState ? 'fa-check' : 'fa-circle'}`;
         
         // Update in Firestore
-        await goalRef.update({
-            completed: !currentStatus,
-            completedAt: !currentStatus ? firebase.firestore.FieldValue.serverTimestamp() : null
+        await db.collection('goals').doc(goalId).update({
+            completed: newCompletedState,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        // Update the button appearance
-        if (!currentStatus) {
-            button.classList.add('completed');
-            button.innerHTML = '<i class="fas fa-check-circle"></i> Completed';
-            button.previousElementSibling.previousElementSibling.style.textDecoration = 'line-through';
-            button.previousElementSibling.style.textDecoration = 'line-through';
+        // Update the goal element's completed class
+        if (newCompletedState) {
+            goalElement.classList.add('completed');
         } else {
-            button.classList.remove('completed');
-            button.innerHTML = '<i class="far fa-circle"></i> Mark as Complete';
-            button.previousElementSibling.previousElementSibling.style.textDecoration = 'none';
-            button.previousElementSibling.style.textDecoration = 'none';
+            goalElement.classList.remove('completed');
         }
+        
+        // Show success message
+        showMessage(`Goal marked as ${newCompletedState ? 'completed' : 'incomplete'}`, 'success');
+        
     } catch (error) {
         console.error('Error updating goal:', error);
-        alert('Failed to update goal status. Please try again.');
+        showMessage('Failed to update goal. Please try again.', 'error');
+        
+        // Revert the UI if there was an error
+        const icon = button.querySelector('i');
+        if (icon) {
+            icon.className = `fas ${icon.classList.contains('fa-check') ? 'fa-circle' : 'fa-check'}`;
+        }
     }
 }
 
@@ -401,6 +413,63 @@ async function loadHistory() {
                 console.error('Error processing document:', doc?.id, error);
             }
         });
+        
+        // Update the history section if needed
+        if (historyContainer) {
+            let historyHTML = '<h2>History</h2>';
+            
+            if (Object.keys(goalsByDate).length === 0) {
+                historyHTML += '<p>No history available yet. Add some goals to get started!</p>';
+            } else {
+                historyHTML += '<div class="history-grid">';
+                
+                // Create a summary of goals by date
+                const historySummary = {};
+                
+                // Calculate summary for each date
+                for (const [date, goals] of Object.entries(goalsByDate)) {
+                    if (!historySummary[date]) {
+                        historySummary[date] = {
+                            totalGoals: 0,
+                            completedGoals: 0,
+                            totalTime: 0
+                        };
+                    }
+                    
+                    goals.forEach(goal => {
+                        historySummary[date].totalGoals++;
+                        if (goal.completed) {
+                            historySummary[date].completedGoals++;
+                        }
+                        if (goal.time) {
+                            historySummary[date].totalTime += parseInt(goal.time) || 0;
+                        }
+                    });
+                }
+                
+                // Generate history HTML
+                for (const [date, data] of Object.entries(historySummary)) {
+                    const completionPercentage = Math.round((data.completedGoals / data.totalGoals) * 100) || 0;
+                    
+                    historyHTML += `
+                        <div class="history-card">
+                            <div class="history-date">${formatDate(date)}</div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: ${completionPercentage}%"></div>
+                            </div>
+                            <div class="history-stats">
+                                <span>${data.completedGoals}/${data.totalGoals} goals</span>
+                                <span>${Math.round(data.totalTime / 60)} hours</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                historyHTML += '</div>';
+            }
+            
+            historyContainer.innerHTML = historyHTML;
+        }
         
         // Sort the dates in descending order (newest first)
         const sortedDates = Object.keys(goalsByDate).sort((a, b) => new Date(b) - new Date(a));

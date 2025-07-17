@@ -16,13 +16,19 @@ try {
     console.log('Firebase initialized successfully');
     
     // Initialize Firestore
-    const db = firebase.firestore();
-    
-    // Enable offline persistence
-    db.enablePersistence()
-        .then(() => console.log('Firestore persistence enabled'))
-        .catch(err => console.error('Firestore persistence error:', err));
-        
+    let db = firebase.firestore();
+
+    // Enable persistence with multi-tab support
+    db.enablePersistence({
+        synchronizeTabs: true
+    }).catch((err) => {
+        if (err.code === 'failed-precondition') {
+            console.warn('Persistence failed - multiple tabs open');
+        } else if (err.code === 'unimplemented') {
+            console.warn('Persistence not supported in this browser');
+        }
+    });
+
     // Make db available globally
     window.db = db;
     

@@ -28,6 +28,27 @@ function showMessage(message, isError = true) {
     }, 5000);
 }
 
+// Event delegation for goal actions
+document.addEventListener('click', (e) => {
+    // Handle complete button clicks
+    if (e.target.closest('.complete-btn')) {
+        const button = e.target.closest('.complete-btn');
+        const goalId = button.dataset.id;
+        if (goalId) {
+            toggleComplete(goalId, button);
+        }
+    }
+    
+    // Handle delete button clicks
+    if (e.target.closest('.delete-btn')) {
+        const button = e.target.closest('.delete-btn');
+        const goalId = button.dataset.id;
+        if (goalId) {
+            deleteGoal(goalId);
+        }
+    }
+});
+
 // Wait for Firebase to be ready
 document.addEventListener('DOMContentLoaded', () => {
     // Check if Firebase is initialized
@@ -229,22 +250,22 @@ function createGoalElement(goal, isToday) {
     const completedText = goal.completed ? 'Completed' : 'Mark as Complete';
     
     goalElement.innerHTML = `
-        <div class="goal-header">
-            <span class="goal-subject">${goal.subject}</span>
-            <span class="goal-time">${goal.time} hours</span>
-        </div>
-        <div class="goal-topic">${goal.topic}</div>
-        <div class="goal-target">${goal.target}</div>
-        ${isToday ? `
-            <div class="goal-actions" style="margin-top: 10px; text-align: right;">
-                <button class="complete-btn ${completedClass}" onclick="toggleComplete(${goal.id}, this)">
-                    <i class="fas fa-${goal.completed ? 'check-circle' : 'circle'}"></i> ${completedText}
-                </button>
-                <button class="delete-btn" onclick="deleteGoal(${goal.id})" style="background: none; border: none; color: var(--error-color); margin-left: 10px; cursor: pointer;">
-                    <i class="fas fa-trash"></i>
-                </button>
+        <div class="goal-content">
+            <h3>${goal.subject}: ${goal.topic}</h3>
+            <p>${goal.target}</p>
+            <div class="goal-meta">
+                <span>${goal.time} min</span>
+                <span>${new Date(goal.timestamp?.toDate?.() || Date.now()).toLocaleTimeString()}</span>
             </div>
-        ` : ''}
+        </div>
+        <div class="goal-actions">
+            <button class="btn btn-icon complete-btn" data-id="${goal.id}">
+                <i class="fas ${goal.completed ? 'fa-undo' : 'fa-check'}"></i>
+            </button>
+            <button class="btn btn-icon btn-danger delete-btn" data-id="${goal.id}">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
     `;
     
     return goalElement;
@@ -340,27 +361,44 @@ async function loadHistory() {
     }
     
     try {
+        // Show loading state
+        historyContainer.innerHTML = '<p class="loading-message">Loading history...</p>';
+        
         // First, get all goals for the user (this only requires a single-field index on 'userId')
         const querySnapshot = await db.collection('goals')
             .where('userId', '==', currentUser.uid)
-            .get();
+            .get()
+            .catch(error => {
+                console.error('Error fetching goals:', error);
+                throw error;
+            });
             
         const goalsByDate = {};
         
         // Process and group goals by date
         querySnapshot.forEach(doc => {
-            if (doc.exists) {
-                const data = doc.data();
-                const date = data.date;
-                
-                if (!goalsByDate[date]) {
-                    goalsByDate[date] = [];
+            try {
+                if (doc.exists) {
+                    const data = doc.data();
+                    // Ensure required fields exist
+                    if (!data.date) {
+                        console.warn('Goal missing date field:', doc.id, data);
+                        return;
+                    }
+                    
+                    const date = data.date;
+                    
+                    if (!goalsByDate[date]) {
+                        goalsByDate[date] = [];
+                    }
+                    
+                    goalsByDate[date].push({
+                        id: doc.id,
+                        ...data
+                    });
                 }
-                
-                goalsByDate[date].push({
-                    id: doc.id,
-                    ...data
-                });
+            } catch (error) {
+                console.error('Error processing document:', doc?.id, error);
             }
         });
         
@@ -369,7 +407,13 @@ async function loadHistory() {
         
         // Sort goals within each date by timestamp (newest first)
         sortedDates.forEach(date => {
-            goalsByDate[date].sort((a, b) => (b.timestamp?.toDate?.() || 0) - (a.timestamp?.toDate?.() || 0));
+            if (goalsByDate[date]) {
+                goalsByDate[date].sort((a, b) => {
+                    const timeA = a.timestamp?.toDate?.() || 0;
+                    const timeB = b.timestamp?.toDate?.() || 0;
+                    return timeB - timeA;
+                });
+            }
         });
         
         // Update the history section if needed

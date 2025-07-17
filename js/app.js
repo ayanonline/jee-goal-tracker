@@ -8,6 +8,26 @@ const historyDateInput = document.getElementById('historyDate');
 let currentUser = null;
 let db = null;
 
+// Show message to user
+function showMessage(message, isError = true) {
+    const messageDiv = document.getElementById('message');
+    if (!messageDiv) {
+        console.log(message);
+        return;
+    }
+    
+    messageDiv.textContent = message;
+    messageDiv.style.display = 'block';
+    messageDiv.style.backgroundColor = isError ? 'rgba(255, 107, 107, 0.1)' : 'rgba(76, 175, 80, 0.1)';
+    messageDiv.style.borderLeft = `3px solid ${isError ? '#ff6b6b' : '#4caf50'}`;
+    messageDiv.style.color = isError ? '#ff6b6b' : '#4caf50';
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        messageDiv.style.display = 'none';
+    }, 5000);
+}
+
 // Wait for Firebase to be ready
 document.addEventListener('DOMContentLoaded', () => {
     // Check if Firebase is initialized
@@ -55,14 +75,25 @@ async function addGoal(e) {
     
     if (!db) {
         console.error('Firestore not initialized');
-        alert('Database not available. Please refresh the page and try again.');
+        showMessage('Database not available. Please refresh the page and try again.', true);
         return;
     }
     
-    const subject = document.getElementById('subject')?.value;
-    const topic = document.getElementById('topic')?.value;
-    const target = document.getElementById('target')?.value;
+    if (!currentUser || !currentUser.uid) {
+        console.error('User not authenticated');
+        showMessage('Please sign in to add goals', true);
+        return;
+    }
+    
+    const subject = document.getElementById('subject')?.value.trim();
+    const topic = document.getElementById('topic')?.value.trim();
+    const target = document.getElementById('target')?.value.trim();
     const time = parseFloat(document.getElementById('time')?.value || 0);
+    
+    if (!subject || !topic || !target || isNaN(time) || time <= 0) {
+        showMessage('Please fill in all fields with valid values', true);
+        return;
+    }
     
     if (!subject || !topic || !target || isNaN(time)) {
         alert('Please fill in all fields correctly');
@@ -86,10 +117,17 @@ async function addGoal(e) {
     };
     
     try {
-        // Add to Firestore
+        // Add to Firestore with error handling
         if (!db) throw new Error('Database not initialized');
+        
         const docRef = await db.collection('goals').add(goal);
         console.log('Goal added with ID:', docRef.id);
+        
+        // Show success message
+        showMessage('Goal added successfully!', false);
+        
+        // Reload goals to show the new one
+        loadGoals(new Date().toISOString().split('T')[0]);
         
         // Reset form
         goalForm.reset();
@@ -98,7 +136,18 @@ async function addGoal(e) {
         loadGoals(goal.date);
     } catch (error) {
         console.error('Error adding goal:', error);
-        alert('Failed to add goal. Please try again.');
+        let errorMessage = 'Error adding goal';
+        
+        // More user-friendly error messages
+        if (error.code === 'permission-denied') {
+            errorMessage = 'Permission denied. Please sign in again.';
+        } else if (error.code === 'unavailable') {
+            errorMessage = 'Network error. Please check your connection.';
+        } else {
+            errorMessage = error.message || errorMessage;
+        }
+        
+        showMessage(errorMessage, true);
     }
 }
 
@@ -119,16 +168,27 @@ async function loadGoals(date) {
     container.innerHTML = '<p class="no-goals">Loading...</p>';
     
     try {
-        // Query Firestore for goals on the selected date
-        const snapshot = await db.collection('goals')
-            .where('userId', '==', currentUser.uid)
-            .where('date', '==', date)
-            .orderBy('timestamp', 'desc')
-            .get();
+        if (!currentUser || !currentUser.uid) {
+            throw new Error('User not authenticated');
+        }
         
+        // Query Firestore for goals on the selected date for the current user
+        const querySnapshot = await db.collection('goals')
+            .where('date', '==', date)
+            .where('userId', '==', currentUser.uid)
+            .orderBy('timestamp', 'desc')
+            .get({
+                source: 'default' // Try cache first, then server
+            });
+            
         const goals = [];
-        snapshot.forEach(doc => {
-            goals.push({ id: doc.id, ...doc.data() });
+        querySnapshot.forEach((doc) => {
+            if (doc.exists) {
+                goals.push({ 
+                    id: doc.id, 
+                    ...doc.data() 
+                });
+            }
         });
         
         // Clear the container

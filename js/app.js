@@ -49,6 +49,24 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// Format date to a readable string (e.g., '17 Jul 2023')
+function formatDate(dateString) {
+    if (!dateString) return 'No date';
+    
+    try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) {
+            return 'Invalid date';
+        }
+        
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        return dateString; // Return the original string if formatting fails
+    }
+}
+
 // Wait for Firebase to be ready
 document.addEventListener('DOMContentLoaded', () => {
     // Check if Firebase is initialized
@@ -241,28 +259,32 @@ async function loadGoals(date) {
 }
 
 // Create a goal element
-function createGoalElement(goal, isToday) {
+function createGoalElement(goal, isToday = true) {
     const goalElement = document.createElement('div');
-    goalElement.className = `goal-item ${goal.completed ? 'completed' : ''}`;
-    goalElement.dataset.id = goal.id;
+    goalElement.className = 'goal-card';
+    goalElement.setAttribute('data-goal-id', goal.id);
+    
+    if (goal.completed) {
+        goalElement.classList.add('completed');
+    }
     
     const completedClass = goal.completed ? 'completed' : '';
     const completedText = goal.completed ? 'Completed' : 'Mark as Complete';
     
     goalElement.innerHTML = `
         <div class="goal-content">
-            <h3>${goal.subject}: ${goal.topic}</h3>
-            <p>${goal.target}</p>
+            <h3>${goal.subject || 'No Subject'}: ${goal.topic || 'No Topic'}</h3>
+            <p>${goal.target || 'No target set'}</p>
             <div class="goal-meta">
-                <span>${goal.time} min</span>
-                <span>${new Date(goal.timestamp?.toDate?.() || Date.now()).toLocaleTimeString()}</span>
+                <span>${goal.time || 0} min</span>
+                <span>${goal.timestamp ? new Date(goal.timestamp?.toDate?.() || goal.timestamp).toLocaleTimeString() : ''}</span>
             </div>
         </div>
         <div class="goal-actions">
-            <button class="btn btn-icon complete-btn" data-id="${goal.id}">
-                <i class="fas ${goal.completed ? 'fa-undo' : 'fa-check'}"></i>
+            <button class="btn btn-icon complete-btn" data-id="${goal.id}" title="${completedText}">
+                <i class="fas ${goal.completed ? 'fa-check' : 'fa-circle'}"></i>
             </button>
-            <button class="btn btn-icon btn-danger delete-btn" data-id="${goal.id}">
+            <button class="btn btn-icon btn-danger delete-btn" data-id="${goal.id}" title="Delete goal">
                 <i class="fas fa-trash"></i>
             </button>
         </div>
@@ -273,7 +295,8 @@ function createGoalElement(goal, isToday) {
 
 // Toggle goal completion status
 async function toggleComplete(goalId, button) {
-    if (!currentUser) {
+    if (!currentUser || !goalId) {
+        console.error('User not authenticated or no goal ID provided');
         return;
     }
     
@@ -283,16 +306,29 @@ async function toggleComplete(goalId, button) {
     }
     
     try {
-        // Get the goal element
-        const goalElement = button.closest('.goal-card');
+        // Find the closest parent with class 'goal-card' or 'goal-item' or similar
+        let goalElement = button.closest('.goal-card, .goal-item, .goal, [data-goal-id]');
+        
+        // If still not found, try to find any parent with a class containing 'goal'
         if (!goalElement) {
-            throw new Error('Could not find goal element');
+            goalElement = button.closest('[class*="goal"]');
+        }
+        
+        // If still not found, log a warning but continue
+        if (!goalElement) {
+            console.warn('Could not find goal element, but will continue with the update');
         }
         
         // Get the icon element
-        const icon = button.querySelector('i');
+        let icon = button.querySelector('i');
+        if (!icon && button.firstElementChild?.tagName === 'I') {
+            icon = button.firstElementChild;
+        }
+        
         if (!icon) {
-            throw new Error('Could not find icon element');
+            console.warn('Could not find icon element, creating one');
+            icon = document.createElement('i');
+            button.prepend(icon);
         }
         
         // Determine the current state and toggle it
@@ -308,11 +344,13 @@ async function toggleComplete(goalId, button) {
             updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
         
-        // Update the goal element's completed class
-        if (newCompletedState) {
-            goalElement.classList.add('completed');
-        } else {
-            goalElement.classList.remove('completed');
+        // Update the goal element's completed class if element was found
+        if (goalElement) {
+            if (newCompletedState) {
+                goalElement.classList.add('completed');
+            } else {
+                goalElement.classList.remove('completed');
+            }
         }
         
         // Show success message
@@ -322,10 +360,14 @@ async function toggleComplete(goalId, button) {
         console.error('Error updating goal:', error);
         showMessage('Failed to update goal. Please try again.', 'error');
         
-        // Revert the UI if there was an error
-        const icon = button.querySelector('i');
-        if (icon) {
-            icon.className = `fas ${icon.classList.contains('fa-check') ? 'fa-circle' : 'fa-check'}`;
+        // Try to revert the UI if there was an error
+        try {
+            const icon = button.querySelector('i') || button.firstElementChild;
+            if (icon && icon.tagName === 'I') {
+                icon.className = `fas ${icon.classList.contains('fa-check') ? 'fa-circle' : 'fa-check'}`;
+            }
+        } catch (e) {
+            console.error('Error reverting UI:', e);
         }
     }
 }

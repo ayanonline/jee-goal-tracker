@@ -276,7 +276,7 @@ function createGoalElement(goal, isToday = true) {
             <h3>${goal.subject || 'No Subject'}: ${goal.topic || 'No Topic'}</h3>
             <p>${goal.target || 'No target set'}</p>
             <div class="goal-meta">
-                <span>${goal.time || 0} min</span>
+                <span>${goal.time || 0} hours</span>
                 <span>${goal.timestamp ? new Date(goal.timestamp?.toDate?.() || goal.timestamp).toLocaleTimeString() : ''}</span>
             </div>
         </div>

@@ -172,24 +172,28 @@ async function loadGoals(date) {
             throw new Error('User not authenticated');
         }
         
-        // Query Firestore for goals on the selected date for the current user
+        // First, get all goals for the user (this only requires a single-field index on 'userId')
         const querySnapshot = await db.collection('goals')
-            .where('date', '==', date)
             .where('userId', '==', currentUser.uid)
-            .orderBy('timestamp', 'desc')
-            .get({
-                source: 'default' // Try cache first, then server
-            });
+            .get();
             
+        // Then filter and sort in memory
         const goals = [];
         querySnapshot.forEach((doc) => {
             if (doc.exists) {
-                goals.push({ 
-                    id: doc.id, 
-                    ...doc.data() 
-                });
+                const data = doc.data();
+                // Only include goals for the selected date
+                if (data.date === date) {
+                    goals.push({ 
+                        id: doc.id, 
+                        ...data
+                    });
+                }
             }
         });
+        
+        // Sort by timestamp in descending order (newest first)
+        goals.sort((a, b) => (b.timestamp?.toDate?.() || 0) - (a.timestamp?.toDate?.() || 0));
         
         // Clear the container
         container.innerHTML = '';

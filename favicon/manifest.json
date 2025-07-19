@@ -1,5 +1,8 @@
 {
  "name": "Preparation Tracker",
+ "background-color": "#1e1f1f",
+ "theme-color": "#000000",
+ "short_name": "PreTrack",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",

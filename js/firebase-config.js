@@ -212,30 +212,37 @@ function signIn() {
 }
 
 // Sign out function
-function signOut() {
-    const signOutBtn = document.getElementById('signOutBtn');
-    
-    // Show loading state
-    if (signOutBtn) {
-        signOutBtn.disabled = true;
-        signOutBtn.innerHTML = 'Signing Out...';
-    }
-    
-    firebase.auth().signOut()
-        .then(() => {
-            console.log('User signed out');
-            // Redirect or update UI as needed
-            window.location.reload(); // Simple way to reset the UI
-        })
-        .catch((error) => {
-            console.error('Sign out error:', error);
-            alert('Error signing out: ' + error.message);
-        })
-        .finally(() => {
-            // Re-enable button
-            if (signOutBtn) {
-                signOutBtn.disabled = false;
-                signOutBtn.innerHTML = 'Sign Out';
-            }
-        });
+// Handle sign out from the account dropdown
+function setupSignOut() {
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (!logoutBtn) return;
+
+    logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation(); // Prevent dropdown from closing
+        
+        // Show loading state
+        const originalText = logoutBtn.innerHTML;
+        logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing Out...';
+        logoutBtn.style.pointerEvents = 'none';
+        
+        firebase.auth().signOut()
+            .then(() => {
+                console.log('User signed out');
+                // Redirect to login page or reload
+                window.location.href = 'index.html';
+            })
+            .catch((error) => {
+                console.error('Sign out error:', error);
+                alert('Error signing out: ' + error.message);
+                // Reset button state
+                logoutBtn.innerHTML = originalText;
+                logoutBtn.style.pointerEvents = 'auto';
+            });
+    });
 }
+
+// Initialize sign out functionality
+document.addEventListener('DOMContentLoaded', () => {
+    setupSignOut();
+});

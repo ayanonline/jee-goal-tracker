@@ -652,9 +652,18 @@ function handleAddGoal(e) {
     });
 }
 
+// Track if event listeners have been initialized
+let eventListenersInitialized = false;
+
 // Initialize event listeners
 function initEventListeners() {
     console.log('Initializing event listeners...');
+    
+    // Prevent multiple initializations
+    if (eventListenersInitialized) {
+        console.log('Event listeners already initialized, skipping...');
+        return;
+    }
     
     // Get DOM elements
     const goalForm = document.getElementById('goalForm');
@@ -666,11 +675,22 @@ function initEventListeners() {
     
     // Add goal form submission
     if (goalForm) {
-        goalForm.addEventListener('submit', (e) => {
+        // Remove any existing event listeners first
+        const newGoalForm = goalForm.cloneNode(true);
+        goalForm.parentNode.replaceChild(newGoalForm, goalForm);
+        
+        // Add the event listener to the new form
+        newGoalForm.addEventListener('submit', function(e) {
             e.preventDefault();
             handleAddGoal(e);
         });
+        
+        // Update the reference
+        window.goalForm = newGoalForm;
     }
+    
+    // Mark as initialized
+    eventListenersInitialized = true;
     
     // Function to close modal
     const closeModal = () => {
@@ -1062,9 +1082,6 @@ async function addGoal(e) {
         
         // Show success message
         showMessage('Goal added successfully!', false);
-        
-        // Reload goals to show the new one
-        loadGoals(new Date().toISOString().split('T')[0]);
         
         // Reset form
         goalForm.reset();

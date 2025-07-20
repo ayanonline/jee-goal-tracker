@@ -470,15 +470,26 @@ header p {
 .subject-priority-chart {
     background: var(--surface-color);
     border-radius: var(--border-radius);
-    padding: var(--spacing-md);
-    margin-bottom: var(--spacing-md);
+    padding: 0; /* Remove padding to eliminate white space */
+    margin: 0; /* Remove margin */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Prevent any content from bleeding outside */
 }
 
 .chart-container {
     position: relative;
-    height: 300px;
+    width: 100%;
+    max-width: 300px; /* Adjust this value to change the size of the chart */
     margin: 0 auto;
-    max-width: 400px;
+    aspect-ratio: 1; /* This ensures the container is square */
+}
+
+#subjectPriorityChart {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
 }
 
 .chart-legend {
@@ -517,13 +528,14 @@ header p {
 .chart-container {
     position: relative;
     width: 100%;
-    min-height: 350px;
-    height: 400px;
     padding: 20px;
     display: flex !important; /* Ensure flex is always applied */
     flex-direction: column;
     opacity: 1 !important; /* Ensure it's always visible */
     visibility: visible !important; /* Override any hidden states */
+    aspect-ratio: 1; /* Ensure square aspect ratio */
+    max-width: 400px; /* Limit maximum size */
+    margin: 0 auto; /* Center the chart */
 }
 
 /* Chart header */

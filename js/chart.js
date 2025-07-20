@@ -63,11 +63,11 @@ class SubjectChart {
     // Get color for each subject (must match app.js)
     getSubjectColor(subject) {
         const colors = {
-            'Physics': '#4e73df',    // Blue
-            'Chemistry': '#1cc88a',  // Green
-            'Mathematics': '#f6c23e' // Yellow
+            'Physics': '#0000ff',    // Blue
+            'Chemistry': '#00ff00',  // Green
+            'Mathematics': '#ffff00' // Yellow
         };
-        return colors[subject] || '#858796'; // Default gray color if subject not found
+        return colors[subject] || '#000000'; // Default gray color if subject not found
     }
     
     // Prepare chart data from goals
@@ -108,7 +108,7 @@ class SubjectChart {
             labels.push(subject);
             data.push(subjectTime[subject] || 0);
             backgroundColors.push(this.getSubjectColor(subject));
-            borderColors.push('#ffffff');
+            borderColors.push('#1e1e1e');
         });
 
         // If no data at all, show the "No Data" state
@@ -144,9 +144,10 @@ class SubjectChart {
                 data: data,
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false,
+                    maintainAspectRatio: true,
                     cutout: '70%',
-                    radius: '90%',
+                    radius: '100%',
+                    borderWidth: 0,
                     plugins: {
                         legend: {
                             display: false // Hide the legend since we're showing it outside
@@ -210,11 +211,9 @@ class SubjectChart {
     // Get color for subject
     getSubjectColor(subject) {
         const colors = {
-            'Physics': '#4e73df',
-            'Chemistry': '#1cc88a',
-            'Mathematics': '#f6c23e',
-            'Biology': '#4BC0C0',
-            'Default': '#9B59B6'
+            'Physics': '#6c63ff',
+            'Chemistry': '#4caf50',
+            'Mathematics': '#ffc107',
         };
         
         return colors[subject] || colors['Default'];

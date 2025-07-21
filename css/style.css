@@ -522,6 +522,7 @@ header p {
     display: block !important; /* Ensure it's always displayed */
     opacity: 1 !important; /* Ensure it's always visible */
     visibility: visible !important; /* Override any hidden states */
+    aspect-ratio: .7;
 }
 
 /* Chart Container */

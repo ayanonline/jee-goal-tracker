@@ -1487,7 +1487,7 @@ async function loadHistory() {
                         </div>
                         <div class="history-stats">
                             <span>${data.completedGoals}/${data.totalGoals} goals</span>
-                            <span>${Math.round(data.totalTime / 60)} hours</span>
+                            <span>${Math.round(data.totalTime)} hours</span>
                         </div>
                     </div>
                 `;

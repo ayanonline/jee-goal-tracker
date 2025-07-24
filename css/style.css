@@ -86,7 +86,7 @@ header {
     border-radius: 50%;
     object-fit: cover;
     border: none;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: none;
     transition: transform 0.3s ease;
 }
 

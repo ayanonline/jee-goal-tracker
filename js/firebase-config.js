@@ -1,13 +1,12 @@
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCg8vXMI05D4ryToib-BOBY78fmtYYx9fM",
-    authDomain: "jee-goal-tracker.firebaseapp.com",
-    databaseURL: "https://jee-goal-tracker-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "jee-goal-tracker",
-    storageBucket: "jee-goal-tracker.appspot.com",
-    messagingSenderId: "815411618034",
-    appId: "1:815411618034:web:d72fb161c1f53a83fbf06b",
-    measurementId: "G-MBKNZYCEJT"
+    apiKey: "AIzaSyCz__F4gYbQUsi7tMvpfDYThktvoM6giIs",
+    authDomain: "cloudstg-4a80d.firebaseapp.com",
+    projectId: "cloudstg-4a80d",
+    storageBucket: "cloudstg-4a80d.firebasestorage.app",
+    messagingSenderId: "992914272127",
+    appId: "1:992914272127:web:596cfce705ea2b2e2df44a",
+    measurementId: "G-MY11TRN13L"
 };
 
 // Initialize Firebase

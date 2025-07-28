@@ -4,10 +4,10 @@ const firebaseConfig = {
     authDomain: "jee-goal-tracker.firebaseapp.com",
     databaseURL: "https://jee-goal-tracker-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "jee-goal-tracker",
-    storageBucket: "jee-goal-tracker.appspot.com",
+    storageBucket: "jee-goal-tracker.firebasestorage.app",
     messagingSenderId: "815411618034",
-    appId: "1:815411618034:web:d72fb161c1f53a83fbf06b",
-    measurementId: "G-MBKNZYCEJT"
+    appId: "1:815411618034:web:3eed956674db82aafbf06b",
+    measurementId: "G-HM7DH13653"
 };
 
 // Initialize Firebase

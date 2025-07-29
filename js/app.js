@@ -1481,7 +1481,7 @@ async function loadHistory() {
                 
                 historyHTML += `
                     <div class="history-card">
-                        <div class="history-date">${formatDate(date)}</div>
+                        <div class="history-date"><b>${formatDate(date)}</b></div>
                         <div class="progress-bar">
                             <div class="progress" style="width: ${completionPercentage}%"></div>
                         </div>

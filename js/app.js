@@ -1490,6 +1490,9 @@ async function loadHistory() {
                             <span>${Math.round(data.totalTime)} hours</span>
                         </div>
                     </div>
+                    <br>
+                    <hr>
+                    <br>
                 `;
             }
             

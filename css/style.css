@@ -406,24 +406,75 @@ header p {
 
 /* Chart Container */
 .chart-container-wrapper {
-    background: var(--surface-color);
+    width: 100%;
+    margin-bottom: 25px;
+    background-color: var(--surface-color);
     border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.3s ease;
 }
 
-/* Subject Priority Chart */
+/* Chart Styles */
 .subject-priority-chart {
-    margin-bottom: 20px;
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: 0;
+    margin: 0 0 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .chart-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    width: 100%;
     margin-bottom: 15px;
+    padding: 0 10px;
 }
 
+.chart-header h3 {
+    margin: 0 0 15px 0;
+    color: var(--text-primary);
+    font-size: 1.3rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.chart-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin: 0 auto;
+}
+
+#subjectPriorityChart {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+#subjectPriorityChart canvas {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100%;
+    display: block;
+}
+
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Chart toggle button */
 .chart-toggle {
     background: var(--primary-color);
     color: white;
@@ -432,188 +483,10 @@ header p {
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.8rem;
+    transition: background-color 0.2s;
 }
 
-.chart-container {
-    height: 200px;
-    position: relative;
-    aspect-ratio: 1;
-}
-
-.subject-bar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.subject-name {
-    width: 100px;
-    font-weight: 500;
-}
-
-.bar-container {
-    flex-grow: 1;
-    background: #333;
-    height: 20px;
-    border-radius: 10px;
-    margin: 0 10px;
-    overflow: hidden;
-}
-
-.bar {
-    height: 100%;
-    background: var(--primary-color);
-    border-radius: 10px;
-    transition: width 0.5s ease;
-}
-
-/* Chart Styles */
-.subject-priority-chart {
-    background: var(--surface-color);
-    border-radius: var(--border-radius);
-    padding: 0; /* Remove padding to eliminate white space */
-    margin: 0; /* Remove margin */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Prevent any content from bleeding outside */
-}
-
-.chart-container {
-    position: relative;
-    width: 100%;
-    max-width: 300px; /* Adjust this value to change the size of the chart */
-    margin: 0 auto;
-    aspect-ratio: 1; /* This ensures the container is square */
-}
-
-#subjectPriorityChart {
-    width: 100% !important;
-    height: 100% !important;
-    display: block;
-}
-
-.chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: var(--spacing-md);
-    gap: var(--spacing-md);
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    border-radius: var(--border-radius);
-    font-size: var(--font-size-sm);
-    margin-bottom: var(--spacing-xs);
-}
-
-/* Chart container */
-.chart-container-wrapper {
-    width: 100%;
-    margin-bottom: 25px;
-    background-color: var(--surface-color);
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: all 0.3s ease;
-    display: block !important; /* Ensure it's always displayed */
-    opacity: 1 !important; /* Ensure it's always visible */
-    visibility: visible !important; /* Override any hidden states */
-    aspect-ratio: .7;
-}
-
-/* Chart Container */
-.chart-container {
-    position: relative;
-    width: 100%;
-    padding: 20px;
-    display: flex !important; /* Ensure flex is always applied */
-    flex-direction: column;
-    opacity: 1 !important; /* Ensure it's always visible */
-    visibility: visible !important; /* Override any hidden states */
-    aspect-ratio: 1; /* Ensure square aspect ratio */
-    max-width: 400px; /* Limit maximum size */
-    margin: 0 auto; /* Center the chart */
-    aspect-ratio: 1;
-}
-
-/* Chart header */
-.chart-header {
-    margin-bottom: 15px;
-    padding: 0 10px;
-}
-
-.chart-header h3 {
-    margin: 0;
-    color: var(--text-primary);
-    font-size: 1.3rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.chart-header h3::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 20px;
-    background-color: var(--primary-color);
-    border-radius: 3px;
-}
-
-/* Chart canvas container */
-#subjectPriorityChart {
-    width: 100%;
-    height: 100%;
-    flex: 1;
-    position: relative;
-    min-height: 0; /* Fix for Firefox */
-}
-
-/* Ensure canvas fills its container */
-#subjectPriorityChart canvas {
-    width: 100% !important;
-    height: 100% !important;
-    max-height: 100%;
-    display: block;
-    transition: opacity 0.3s ease;
-}
-
-/* Chart legend */
-#chartLegend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
-    padding: 10px 0;
-    max-height: 150px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.1);
-}
-
-/* Custom scrollbar for WebKit browsers */
-#chartLegend::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-
-#chartLegend::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 3px;
-}
-
-#chartLegend::-webkit-scrollbar-thumb {
-    background-color: var(--primary-color);
-    border-radius: 3px;
-}
-
-#chartLegend::-webkit-scrollbar-thumb:hover {
+.chart-toggle:hover {
     background-color: var(--secondary-color);
 }
 
@@ -623,14 +496,13 @@ header p {
     flex-wrap: wrap;
     gap: 10px;
     margin-top: 15px;
-    padding: 10px 5px;
+    padding: 10px 0;
     max-height: 200px;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.1);
 }
 
-/* Custom scrollbar for WebKit browsers */
 #chartLegend::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -651,7 +523,7 @@ header p {
 }
 
 .legend-item {
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: space-between;
     gap: 10px;

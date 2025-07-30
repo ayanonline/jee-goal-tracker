@@ -60,14 +60,22 @@ class SubjectChart {
         }
     }
 
-    // Get color for each subject (must match app.js)
-    getSubjectColor(subject) {
-        const colors = {
-            'Physics': '#0000ff',    // Blue
-            'Chemistry': '#00ff00',  // Green
-            'Mathematics': '#ffff00' // Yellow
-        };
-        return colors[subject] || '#000000'; // Default gray color if subject not found
+    // Create gradient for each subject
+    createGradient(ctx, subject) {
+        const gradient = ctx.createLinearGradient(0, 0, 0, 150);
+        
+        if (subject === 'Physics') {
+            gradient.addColorStop(0, '#5B8FF9');
+            gradient.addColorStop(1, '#1D4ED8');
+        } else if (subject === 'Chemistry') {
+            gradient.addColorStop(0, '#5AD8A6');
+            gradient.addColorStop(1, '#10B981');
+        } else { // Mathematics
+            gradient.addColorStop(0, '#F6C54D');
+            gradient.addColorStop(1, '#F59E0B');
+        }
+        
+        return gradient;
     }
     
     // Prepare chart data from goals
@@ -139,18 +147,36 @@ class SubjectChart {
     // Create a new chart instance
     createChart(ctx, data) {
         try {
+            // Create gradients for each subject
+            const gradientColors = [];
+            if (data.labels && data.labels.length > 0) {
+                data.labels.forEach((label, index) => {
+                    if (label !== 'No Data') {
+                        gradientColors.push(this.createGradient(ctx, label));
+                    } else {
+                        gradientColors.push('#f0f0f0');
+                    }
+                });
+                
+                // Update the background colors with gradients
+                if (data.datasets && data.datasets.length > 0) {
+                    data.datasets[0].backgroundColor = gradientColors;
+                }
+            }
+            
             this.chart = new Chart(ctx, {
                 type: 'doughnut',
                 data: data,
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
-                    cutout: '70%',
-                    radius: '100%',
+                    maintainAspectRatio: false, // Changed to false to allow custom aspect ratio
+                    aspectRatio: 1, // Ensures the chart is perfectly circular
+                    cutout: '0%',
+                    radius: '80%',
                     borderWidth: 0,
                     plugins: {
                         legend: {
-                            display: false // Hide the legend since we're showing it outside
+                            display: true
                         },
                         tooltip: {
                             backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -162,12 +188,11 @@ class SubjectChart {
                                 size: 13
                             },
                             padding: 12,
-                            displayColors: true,
+                            displayColors: false,
                             callbacks: {
                                 label: function(context) {
-                                    const label = context.label || '';
                                     const value = context.raw || 0;
-                                    return `${label}: ${value} hours`;
+                                    return [`${value} hours`];
                                 }
                             }
                         }
@@ -182,7 +207,7 @@ class SubjectChart {
                     },
                     elements: {
                         arc: {
-                            borderWidth: 2
+                            borderWidth: 0
                         }
                     }
                 }
@@ -200,6 +225,25 @@ class SubjectChart {
         if (!this.chart) return;
         
         try {
+            // Update gradients when data changes
+            const ctx = this.chart.ctx;
+            const gradientColors = [];
+            
+            if (data.labels && data.labels.length > 0) {
+                data.labels.forEach((label, index) => {
+                    if (label !== 'No Data') {
+                        gradientColors.push(this.createGradient(ctx, label));
+                    } else {
+                        gradientColors.push('#f0f0f0');
+                    }
+                });
+                
+                // Update the background colors with gradients
+                if (data.datasets && data.datasets.length > 0) {
+                    data.datasets[0].backgroundColor = gradientColors;
+                }
+            }
+            
             this.chart.data = data;
             this.chart.update();
             console.log('✅ Chart updated successfully');
@@ -208,15 +252,15 @@ class SubjectChart {
         }
     }
 
-    // Get color for subject
+    // Get color for subject (fallback method)
     getSubjectColor(subject) {
         const colors = {
-            'Physics': '#6c63ff',
-            'Chemistry': '#4caf50',
-            'Mathematics': '#ffc107',
+            'Physics': '#5B8FF9',
+            'Chemistry': '#5AD8A6',
+            'Mathematics': '#F6C54D',
         };
         
-        return colors[subject] || colors['Default'];
+        return colors[subject] || '#f0f0f0';
     }
 
     // Clean up chart resources

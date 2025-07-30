@@ -503,6 +503,173 @@ header p {
     scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.1);
 }
 
+/* About Page Styles */
+.about-section {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--background-color);
+    color: var(--text-primary);
+}
+
+.about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+.about-content {
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.about-header h1 {
+    color: var(--primary-color);
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--spacing-md);
+}
+
+.about-header p {
+    color: var(--text-secondary);
+    max-width: 700px;
+    margin: 0 auto;
+    font-size: var(--font-size-md);
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+}
+
+.about-text h2 {
+    color: var(--primary-color);
+    margin: var(--spacing-lg) 0 var(--spacing-md);
+    font-size: 1.5rem;
+}
+
+.about-text p {
+    margin-bottom: var(--spacing-md);
+    line-height: 1.7;
+    color: var(--text-primary);
+}
+
+.owner-details {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid #333;
+}
+
+.owner-details h3 {
+    color: var(--primary-color);
+    margin: var(--spacing-lg) 0 var(--spacing-md);
+    font-size: 1.3rem;
+}
+
+.contact-info {
+    margin-top: var(--spacing-xl);
+}
+
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+}
+
+.contact-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    padding: var(--spacing-xs) 0;
+}
+
+.contact-link:hover {
+    color: var(--primary-color);
+}
+
+.contact-link i {
+    font-size: 1.2rem;
+    width: 24px;
+    text-align: center;
+}
+
+.about-image {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+}
+
+.about-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+    object-fit: cover;
+    border: 2px solid var(--primary-color);
+}
+
+.about-image img:hover {
+    transform: translateY(-10px);
+}
+
+/* Responsive styles for about page */
+@media (max-width: 992px) {
+    .about-grid {
+        gap: var(--spacing-lg);
+    }
+    
+    .about-content {
+        padding: var(--spacing-lg);
+    }
+}
+
+@media (max-width: 768px) {
+    .about-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .about-image {
+        order: -1;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .about-image img {
+        max-width: 80%;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .about-content {
+        padding: var(--spacing-md);
+    }
+    
+    .about-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .about-text h2 {
+        font-size: 1.3rem;
+    }
+    
+    .about-image img {
+        max-width: 100%;
+    }
+}
+
 #chartLegend::-webkit-scrollbar {
     width: 6px;
     height: 6px;

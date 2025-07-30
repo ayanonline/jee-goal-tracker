@@ -1105,6 +1105,24 @@ async function addGoal(e) {
     }
 }
 
+// Update progress bar based on completed goals
+function updateProgressBar(goals) {
+    const progressFill = document.getElementById('progressFill');
+    const completedGoalsElement = document.getElementById('completedGoals');
+    const totalGoalsElement = document.getElementById('totalGoals');
+    
+    if (!progressFill || !completedGoalsElement || !totalGoalsElement) return;
+    
+    const totalGoals = goals.length;
+    const completedGoals = goals.filter(goal => goal.completed).length;
+    const progress = totalGoals > 0 ? Math.round((completedGoals / totalGoals) * 100) : 0;
+    
+    // Update the UI
+    completedGoalsElement.textContent = completedGoals;
+    totalGoalsElement.textContent = totalGoals;
+    progressFill.style.width = `${progress}%`;
+}
+
 // Load goals for a specific date
 function loadGoals(date) {
     console.log(`Loading goals for date: ${date}`);
@@ -1184,6 +1202,11 @@ function loadGoals(date) {
                 const goalElement = createGoalElement(goal, date === today);
                 container.appendChild(goalElement);
             });
+            
+            // Update progress bar if it's today's goals
+            if (date === today) {
+                updateProgressBar(goals);
+            }
             
             // Resolve with the loaded goals
             resolve(goals);
@@ -1310,6 +1333,13 @@ async function toggleComplete(goalId, button) {
         
         // Show success message
         showMessage(`Goal marked as ${newCompletedState ? 'completed' : 'incomplete'}!`, false);
+        
+        // Update progress bar if this is today's goal
+        const today = new Date().toISOString().split('T')[0];
+        const dateElement = goalElement ? goalElement.querySelector('.goal-date') : null;
+        if (dateElement && dateElement.textContent.includes('Today')) {
+            loadGoals(today).catch(console.error);
+        }
         
     } catch (error) {
         console.error('Error toggling goal completion:', error);

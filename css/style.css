@@ -87,11 +87,12 @@ header {
     object-fit: cover;
     border:none;
     box-shadow: none;
+    transform: scale(1.5);
     transition: transform 0.3s ease;
 }
 
 .header-logo:hover {
-    transform: scale(1.1);
+    transform: scale(1.8);
 }
 
 /* Responsive Media Queries */
@@ -172,8 +173,7 @@ header {
 }
 
 .header-text {
-    text-align: center;
-    margin: 0 auto;
+    text-align: left;
     max-width: 100%;
     min-width: 0; /* Allows text truncation */
     padding: 0 var(--spacing-sm);

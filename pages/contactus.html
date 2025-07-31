@@ -226,20 +226,20 @@
 <body>
   <div class="container">
     <h2>Contact Us</h2>
-    <form id="contactForm" action="mailto:pretrack001@gmail.com" method="post" enctype="text/plain">
+    <form id="contactForm">
       <label for="name">Your Name</label>
-      <input type="text" id="name" name="name" required autocomplete="name" placeholder="Enter your name">
+      <input type="text" id="name" required placeholder="Enter your name">
 
       <label for="email">Your Email</label>
-      <input type="email" id="email" name="email" required autocomplete="email" placeholder="Enter your email">
+      <input type="email" id="email" required placeholder="Enter your email">
 
       <label for="subject">Subject</label>
-      <input type="text" id="subject" name="subject" required placeholder="Enter your subject">
+      <input type="text" id="subject" required placeholder="Enter your subject">
 
       <label for="message">Message</label>
-      <textarea id="message" name="message" required placeholder="Enter your message"></textarea>
+      <textarea id="message" required placeholder="Enter your message"></textarea>
 
-      <button type="submit">Send Message</button>
+      <button type="button" id="sendEmailBtn">Send Message</button>
     </form>
 
     <div class="info">
@@ -260,6 +260,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('contactForm');
+      const sendBtn = document.getElementById('sendEmailBtn');
       
       // Add required indicators to labels
       const requiredFields = form.querySelectorAll('[required]');
@@ -268,12 +269,24 @@
         if (label) label.classList.add('required');
       });
 
-      // Form validation on submit
-      form.addEventListener('submit', function(e) {
+      // Handle send button click
+      sendBtn.addEventListener('click', function() {
         if (!form.checkValidity()) {
-          e.preventDefault();
           form.reportValidity();
+          return;
         }
+        
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        
+        // Create mailto link
+        const mailtoLink = `mailto:pretrack001@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+
+        
+        // Open default email client
+        window.location.href = mailtoLink;
       });
       
       // Real-time validation

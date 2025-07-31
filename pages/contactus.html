@@ -10,13 +10,13 @@
   <meta name="description" content="Contact us for any inquiries or feedback about PreTrack.">
   <meta name="keywords" content="PreTrack, contact us, support, feedback">
   <meta name="author" content="PreTrack">
-  <link rel="icon" href="favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-  <link rel="manifest" href="favicon/manifest.json">
-  <link rel="shortcut icon" href="favicon/favicon.ico">
+  <link rel="icon" href="../favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="../favicon/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="../favicon/favicon-16x16.png">
+  <link rel="manifest" href="../favicon/manifest.json">
+  <link rel="shortcut icon" href="../favicon/favicon.ico">
   <title>Contact Us | PreTrack</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -226,7 +226,7 @@
 <body>
   <div class="container">
     <h2>Contact Us</h2>
-    <form action="mailto:pretrack001@gmail.com" method="POST" enctype="text/plain">
+    <form id="contactForm" action="mailto:pretrack001@gmail.com" method="post" enctype="text/plain">
       <label for="name">Your Name</label>
       <input type="text" id="name" name="name" required autocomplete="name" placeholder="Enter your name">
 
@@ -244,16 +244,22 @@
 
     <div class="info">
       <p><i class="fas fa-envelope"></i> <span><strong>Email:</strong> <a href="mailto:pretrack001@gmail.com" style="color: #82B1FF; text-decoration: none;">pretrack001@gmail.com</a></span></p>
-      <p><i class="fas fa-phone"></i> <span><strong>Phone:</strong> <a href="tel:+919876543210" style="color: #82B1FF; text-decoration: none;">+91 98765 43210</a></span></p>
+      <p><i class="fas fa-phone"></i> <span><strong>Phone:</strong> <a href="#" style="color: #82B1FF; text-decoration: none;">-**********</a></span></p>
       <p><i class="fas fa-map-marker-alt"></i> <span><strong>Address:</strong> Kolkata, India</span></p>
       <p><i class="fas fa-info-circle"></i> <span>Need immediate help? Reach out to our support team and we'll respond as quickly as possible.</span></p>
+    </div>
+    <div>
+      <center>
+        <a href="../index.html">
+          <button>Back to Home</button>
+        </a>
+      </center>
     </div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const form = document.querySelector('form');
-      const submitBtn = form.querySelector('button[type="submit"]');
+      const form = document.getElementById('contactForm');
       
       // Add required indicators to labels
       const requiredFields = form.querySelectorAll('[required]');
@@ -262,29 +268,11 @@
         if (label) label.classList.add('required');
       });
 
-      // Form submission handler
-      form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        // Disable button and show loading state
-        const originalBtnText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span class="spinner"></span> Sending...';
-        
-        try {
-          // Simulate form submission (replace with actual form submission)
-          await new Promise(resolve => setTimeout(resolve, 1500));
-          
-          // Show success message
-          alert('Thank you for your message! We will get back to you soon.');
-          form.reset();
-        } catch (error) {
-          console.error('Error:', error);
-          alert('There was an error sending your message. Please try again later.');
-        } finally {
-          // Reset button state
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
+      // Form validation on submit
+      form.addEventListener('submit', function(e) {
+        if (!form.checkValidity()) {
+          e.preventDefault();
+          form.reportValidity();
         }
       });
       
@@ -292,14 +280,11 @@
       const inputs = form.querySelectorAll('input, textarea');
       inputs.forEach(input => {
         input.addEventListener('input', function() {
-          if (input.checkValidity()) {
-            input.style.borderColor = '#2C2C2C';
-          } else {
-            input.style.borderColor = '#ff4444';
-          }
+          input.style.borderColor = input.checkValidity() ? '#2C2C2C' : '#ff4444';
         });
       });
     });
+  </script>
   </script>
 </body>
 </html>

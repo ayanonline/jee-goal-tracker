@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
     <title>Preparation Tracker</title>
-    <meta name="description" content="Preparation Tracker is a web application that helps you track your preparation for the JEE exam. It allows you to set goals, create a weekly planner, and monitor your progress.">
-    <meta name="keywords" content="JEE preparation, preparation tracker, JEE preparation tracker, JEE preparation planner">
+    <meta name="description"
+        content="Preparation Tracker is a web application that helps you track your preparation for the JEE exam. It allows you to set goals, create a weekly planner, and monitor your progress.">
+    <meta name="keywords"
+        content="JEE preparation, preparation tracker, JEE preparation tracker, JEE preparation planner">
     <meta name="author" content="Preparation Tracker">
-    
+
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
@@ -28,7 +31,7 @@
     <meta name="msapplication-background-color" content="#1e1f1f">
     <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
     <link rel="shortcut icon" href="favicon/favicon.ico">
-    
+
     <!-- Styles -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -37,28 +40,118 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
     <!-- Auth Container -->
     <div id="authContainer" class="auth-container" style="display: none;">
         <div class="auth-box">
-            <h2>Welcome to Preparation Tracker</h2>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" placeholder="Enter your email" required>
+            <!-- Left Side - Illustration -->
+            <div class="auth-illustration">
+                <!-- Floating shapes -->
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+
+                <!-- Book icon -->
+                <div class="book-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+
+                <h2>Welcome Back!</h2>
+                <p>Track your JEE preparation journey with us</p>
             </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
+
+            <!-- Right Side - Forms -->
+            <div class="auth-forms-wrapper">
+                <!-- Login Form -->
+                <div class="auth-form active" id="loginForm">
+                    <div class="auth-header">
+                        <h2>Sign In</h2>
+                        <p>Sign in to continue to your dashboard</p>
+                    </div>
+
+                    <form id="loginFormElement" onsubmit="event.preventDefault(); signIn();">
+                        <div id="loginMessage" class="auth-message"></div>
+
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="loginEmail" placeholder="Email Address" required>
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="loginPassword" placeholder="Password" required>
+                            <i class="fas fa-eye toggle-password"
+                                onclick="togglePasswordVisibility('loginPassword')"></i>
+                        </div>
+
+                        <div class="forgot-password">
+                            <a href="#" id="forgotPasswordBtn">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-text">Sign In</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+
+                        <div class="auth-footer">
+                            Don't have an account?
+                            <a href="#" id="switchToSignup">Sign up</a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Sign Up Form -->
+                <div class="auth-form" id="signupForm">
+                    <div class="auth-header">
+                        <h2>Create Account</h2>
+                        <p>Join thousands of JEE aspirants</p>
+                    </div>
+
+                    <form id="signupFormElement" onsubmit="event.preventDefault(); signUp();">
+                        <div id="signupMessage" class="auth-message"></div>
+
+                        <div class="input-group">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="signupName" placeholder="Full Name" required>
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="signupEmail" placeholder="Email Address" required>
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="signupPassword" placeholder="Create Password" required>
+                            <i class="fas fa-eye toggle-password"
+                                onclick="togglePasswordVisibility('signupPassword')"></i>
+                        </div>
+                        <div class="password-hint">Use 6 or more characters with a mix of letters, numbers & symbols
+                        </div>
+
+                        <div class="input-group">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                            <i class="fas fa-eye toggle-password"
+                                onclick="togglePasswordVisibility('confirmPassword')"></i>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-text">Create Account</span>
+                        </button>
+
+                        <div class="auth-footer">
+                            Already have an account?
+                            <a href="#" id="switchToLogin">Sign In</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="auth-buttons">
-                <button id="signInBtn" type="button" onclick="signIn()" class="btn">Sign In</button>
-                <button id="signUpBtn" type="button" onclick="signUp()" class="btn btn-secondary">Sign Up</button>
-            </div>
-            <div id="authMessage" style="margin-top: 15px; color: #ff6b6b; font-size: 0.9em; min-height: 20px;"></div>
         </div>
     </div>
 
@@ -69,11 +162,15 @@
     <div id="mainContent" class="container" style="display: none;">
         <header>
             <div class="header-content">
-                <a href="index.html"><div class="logo-container">
-                    <img src="images/ayan.png" alt="Logo" class="header-logo">
-                </div></a>
+                <a href="index.html">
+                    <div class="logo-container">
+                        <img src="images/ayan.png" alt="Logo" class="header-logo">
+                    </div>
+                </a>
                 <div class="header-text">
-                    <a href="index.html"><h1>Preparation Tracker</h1></a>
+                    <a href="index.html">
+                        <h1>Preparation Tracker</h1>
+                    </a>
                     <p>Track your daily study goals and progress</p>
                 </div>
                 <div class="account-menu">
@@ -89,7 +186,8 @@
                                 <a href="#" id="changeNameBtn"><i class="fas fa-user-edit"></i> Change Name</a>
                                 <a href="#" id="changePasswordBtn"><i class="fas fa-key"></i> Change Password</a>
                                 <a href="pages/about.html" id="aboutBtn"><i class="fas fa-info-circle"></i> About Us</a>
-                                <a href="pages/contactus.html" id="contactUsBtn"><i class="fas fa-envelope"></i> Contact Us</a>
+                                <a href="pages/contactus.html" id="contactUsBtn"><i class="fas fa-envelope"></i> Contact
+                                    Us</a>
                                 <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a>
                             </div>
                         </div>
@@ -126,7 +224,7 @@
                 <div id="todayGoals">
                     <p class="no-goals">No goals added for today. Click 'Add Today's Goal' to get started!</p>
                 </div>
-                
+
                 <h2>History</h2>
                 <div class="date-filter">
                     <label for="historyDate">Select Date: </label>
@@ -136,7 +234,7 @@
                     <p class="no-goals">Select a date to view past goals</p>
                 </div>
             </div>
-            
+
             <!-- Add Goal Modal -->
             <div id="addGoalModal" class="modal">
                 <div class="modal-content">
@@ -158,11 +256,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="topic">Topic</label>
-                                <input type="text" id="topic" placeholder="e.g., Electrostatics, Organic Chemistry" required>
+                                <input type="text" id="topic" placeholder="e.g., Electrostatics, Organic Chemistry"
+                                    required>
                             </div>
                             <div class="form-group">
                                 <label for="target">Target</label>
-                                <input type="text" id="target" placeholder="e.g., Solve 30 problems, Complete 2 chapters" required>
+                                <input type="text" id="target"
+                                    placeholder="e.g., Solve 30 problems, Complete 2 chapters" required>
                             </div>
                             <div class="form-group">
                                 <label for="time">Time Spent (hours)</label>
@@ -201,11 +301,13 @@
                     </div>
                     <div class="form-group">
                         <label for="editTopic">Topic</label>
-                        <input type="text" id="editTopic" placeholder="e.g., Electrostatics, Organic Chemistry" required>
+                        <input type="text" id="editTopic" placeholder="e.g., Electrostatics, Organic Chemistry"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="editTarget">Target</label>
-                        <input type="text" id="editTarget" placeholder="e.g., Solve 30 problems, Complete 2 chapters" required>
+                        <input type="text" id="editTarget" placeholder="e.g., Solve 30 problems, Complete 2 chapters"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="editTime">Time Spent (hours)</label>
@@ -242,9 +344,9 @@
                         <label for="confirmPassword">Confirm New Password</label>
                         <input type="password" id="confirmPassword" placeholder="Confirm new password" required>
                     </div>
-                    
+
                     <div id="passwordChangeMessage" class="message" style="display: none; margin-bottom: 20px;"></div>
-                    
+
                     <div class="modal-footer">
                         <button id="submitPasswordChange" class="btn">Update Password</button>
                         <button id="cancelPasswordChange" class="btn btn-secondary">Cancel</button>
@@ -268,9 +370,9 @@
                         <input type="text" id="newDisplayName" placeholder="Enter your new display name" required>
                         <small>This name will be displayed in the header</small>
                     </div>
-                    
+
                     <div id="nameChangeMessage" class="message" style="display: none; margin-bottom: 20px;"></div>
-                    
+
                     <div class="modal-footer">
                         <button id="submitNameChange" class="btn" type="submit">Update Name</button>
                         <button id="cancelNameChange" class="btn btn-secondary" type="button">Cancel</button>
@@ -282,31 +384,33 @@
 
     <!-- Load Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Load Firebase config and app scripts -->
+
+    <!-- Load Firebase config and auth scripts -->
     <script src="js/firebase-config.js"></script>
+    <script src="js/auth.js"></script>
     <script type="module">
         // Import the chart module
         import subjectChart from './js/chart.js';
-        
+
         // Make chart instance globally available
         window.subjectChart = subjectChart;
-        
+
         // Initialize the chart module
         subjectChart.init().then(() => {
             console.log('Chart module ready');
         }).catch(error => {
             console.error('Failed to initialize chart module:', error);
         });
-        
+
         // Load app.js after chart module is ready
         const script = document.createElement('script');
         script.src = 'js/app.js';
         script.type = 'module';
-        script.onerror = function() {
+        script.onerror = function () {
             console.error('Error loading app.js');
         };
         document.body.appendChild(script);
     </script>
 </body>
+
 </html>

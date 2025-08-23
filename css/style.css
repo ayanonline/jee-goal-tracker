@@ -130,7 +130,6 @@
     opacity: 1;
     font-size: 0.9rem;
     transition: opacity 0.2s ease;
-    text-align: center;
 }
 
 /* Hide placeholder on focus */

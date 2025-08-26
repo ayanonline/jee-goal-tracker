@@ -46,112 +46,122 @@
 </head>
 
 <body>
-    <!-- Auth Container -->
+    <!-- 3D Auth Container -->
     <div id="authContainer" class="auth-container" style="display: none;">
-        <div class="auth-box">
-            <!-- Left Side - Illustration -->
-            <div class="auth-illustration">
-                <!-- Floating shapes -->
-                <div class="shape shape-1"></div>
-                <div class="shape shape-2"></div>
-                <div class="shape shape-3"></div>
+        <div class="auth-3d-scene">
+            <div class="auth-3d-cube">
+                <div class="auth-3d-face auth-3d-face--front">
+                    <div class="auth-box">
+                        <!-- Left Side - 3D Illustration -->
+                        <div class="auth-illustration">
+                            <div class="floating-shapes">
+                                <div class="shape shape-1"></div>
+                                <div class="shape shape-2"></div>
+                                <div class="shape shape-3"></div>
+                                <div class="shape shape-4"></div>
+                            </div>
 
-                <!-- Book icon -->
-                <div class="book-icon">
-                    <i class="fas fa-book-open"></i>
-                </div>
+                            <div class="book-icon">
+                                <i class="fas fa-atom"></i>
+                            </div>
 
-                <h2>Welcome!</h2>
-                <p>Track your JEE preparation journey with us</p>
-            </div>
+                            <h2>Welcome Back!</h2>
+                            <p>Embark on your JEE preparation journey with us</p>
+                        </div>
 
-            <!-- Right Side - Forms -->
-            <div class="auth-forms-wrapper">
-                <!-- Login Form -->
-                <div class="auth-form active" id="loginForm">
-                    <div class="auth-header">
-                        <h2>Sign In</h2>
-                        <p>Sign in to continue to your dashboard</p>
+                        <!-- Right Side - Sliding Forms -->
+                        <div class="auth-forms-wrapper">
+                            <div class="forms-container">
+                                <!-- Login Form -->
+                                <div class="auth-form active" id="loginForm">
+                                    <div class="auth-header">
+                                        <h2>Sign In</h2>
+                                        <p>Sign in to continue to your dashboard</p>
+                                    </div>
+
+                                    <form id="loginFormElement" onsubmit="event.preventDefault(); signIn();">
+                                        <div id="loginMessage" class="auth-message"></div>
+
+                                        <div class="input-group">
+                                            <i class="fas fa-envelope"></i>
+                                            <input type="email" id="loginEmail" placeholder="Email Address" required>
+                                        </div>
+
+                                        <div class="input-group">
+                                            <i class="fas fa-lock"></i>
+                                            <input type="password" id="loginPassword" placeholder="Password" required>
+                                            <i class="fas fa-eye toggle-password"
+                                                onclick="togglePasswordVisibility('loginPassword')"></i>
+                                        </div>
+
+                                        <div class="forgot-password">
+                                            <a href="#" id="forgotPasswordBtn">Forgot password?</a>
+                                        </div>
+
+                                        <button type="submit" class="btn-3d btn-primary">
+                                            <span class="btn-text">Sign In</span>
+                                            <span class="btn-icon"><i class="fas fa-arrow-right"></i></span>
+                                        </button>
+
+                                        <div class="auth-footer">
+                                            Don't have an account?
+                                            <a href="#" id="switchToSignup" class="auth-switch-link">Sign up</a>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Sign Up Form -->
+                                <div class="auth-form" id="signupForm">
+                                    <div class="auth-header">
+                                        <h2>Create Account</h2>
+                                        <p>Join thousands of JEE aspirants</p>
+                                    </div>
+
+                                    <form id="signupFormElement" onsubmit="event.preventDefault(); signUp();">
+                                        <div id="signupMessage" class="auth-message"></div>
+
+                                        <div class="input-group">
+                                            <i class="fas fa-user"></i>
+                                            <input type="text" id="signupName" placeholder="Full Name" required>
+                                        </div>
+
+                                        <div class="input-group">
+                                            <i class="fas fa-envelope"></i>
+                                            <input type="email" id="signupEmail" placeholder="Email Address" required>
+                                        </div>
+
+                                        <div class="input-group">
+                                            <i class="fas fa-lock"></i>
+                                            <input type="password" id="signupPassword" placeholder="Create Password" required>
+                                            <i class="fas fa-eye toggle-password"
+                                                onclick="togglePasswordVisibility('signupPassword')"></i>
+                                        </div>
+                                        <div class="password-hint">Use 6 or more characters with a mix of letters, numbers & symbols</div>
+
+                                        <div class="input-group">
+                                            <i class="fas fa-lock"></i>
+                                            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                                            <i class="fas fa-eye toggle-password"
+                                                onclick="togglePasswordVisibility('confirmPassword')"></i>
+                                        </div>
+
+                                        <button type="submit" class="btn-3d btn-primary">
+                                            <span class="btn-text">Create Account</span>
+                                            <span class="btn-icon"><i class="fas fa-user-plus"></i></span>
+                                        </button>
+
+                                        <div class="auth-footer">
+                                            Already have an account?
+                                            <a href="#" id="switchToLogin" class="auth-switch-link">Sign In</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <form id="loginFormElement" onsubmit="event.preventDefault(); signIn();">
-                        <div id="loginMessage" class="auth-message"></div>
-
-                        <div class="input-group">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" id="loginEmail" placeholder="Email Address" required>
-                        </div>
-
-                        <div class="input-group">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="loginPassword" placeholder="Password" required>
-                            <i class="fas fa-eye toggle-password"
-                                onclick="togglePasswordVisibility('loginPassword')"></i>
-                        </div>
-
-                        <div class="forgot-password">
-                            <a href="#" id="forgotPasswordBtn">Forgot password?</a>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">
-                            <span class="btn-text">Sign In</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
-
-                        <div class="auth-footer">
-                            Don't have an account?
-                            <a href="#" id="switchToSignup">Sign up</a>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Sign Up Form -->
-                <div class="auth-form" id="signupForm">
-                    <div class="auth-header">
-                        <h2>Create Account</h2>
-                        <p>Join thousands of JEE aspirants</p>
-                    </div>
-
-                    <form id="signupFormElement" onsubmit="event.preventDefault(); signUp();">
-                        <div id="signupMessage" class="auth-message"></div>
-
-                        <div class="input-group">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="signupName" placeholder="Full Name" required>
-                        </div>
-
-                        <div class="input-group">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" id="signupEmail" placeholder="Email Address" required>
-                        </div>
-
-                        <div class="input-group">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="signupPassword" placeholder="Create Password" required>
-                            <i class="fas fa-eye toggle-password"
-                                onclick="togglePasswordVisibility('signupPassword')"></i>
-                        </div>
-                        <div class="password-hint">Use 6 or more characters with a mix of letters, numbers & symbols
-                        </div>
-
-                        <div class="input-group">
-                            <i class="fas fa-lock"></i>
-                            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-                            <i class="fas fa-eye toggle-password"
-                                onclick="togglePasswordVisibility('confirmPassword')"></i>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">
-                            <span class="btn-text">Create Account</span>
-                        </button>
-
-                        <div class="auth-footer">
-                            Already have an account?
-                            <a href="#" id="switchToLogin">Sign In</a>
-                        </div>
-                    </form>
                 </div>
             </div>
+        </div>
         </div>
     </div>
 

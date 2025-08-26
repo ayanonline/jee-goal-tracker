@@ -14,13 +14,14 @@ function togglePasswordVisibility(inputId) {
     }
 }
 
-// Toggle between login and signup forms
+// Toggle between login and signup forms with sliding animation
 function toggleAuthForm() {
+    const formsWrapper = document.querySelector('.auth-forms-wrapper');
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
     
-    loginForm.classList.toggle('active');
-    signupForm.classList.toggle('active');
+    // Toggle the signup-active class to trigger the slide animation
+    formsWrapper.classList.toggle('signup-active');
     
     // Clear messages when switching forms
     document.getElementById('loginMessage').textContent = '';
@@ -29,6 +30,15 @@ function toggleAuthForm() {
     // Reset forms
     document.getElementById('loginFormElement').reset();
     document.getElementById('signupFormElement').reset();
+    
+    // Update form states
+    if (formsWrapper.classList.contains('signup-active')) {
+        loginForm.style.pointerEvents = 'none';
+        signupForm.style.pointerEvents = 'auto';
+    } else {
+        loginForm.style.pointerEvents = 'auto';
+        signupForm.style.pointerEvents = 'none';
+    }
 }
 
 // Show auth message with animation
@@ -87,7 +97,8 @@ async function signUp() {
     const email = document.getElementById('signupEmail').value.trim();
     const password = document.getElementById('signupPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-    const signUpBtn = document.querySelector('#signupForm .btn-primary');
+    const signUpBtn = document.querySelector('#signupFormElement button[type="submit"]');
+    const originalBtnText = signUpBtn.innerHTML; // Store original button text
     
     // Validate form
     if (!name || !email || !password || !confirmPassword) {
@@ -106,7 +117,6 @@ async function signUp() {
     }
     
     try {
-        const originalBtnText = signUpBtn.innerHTML;
         signUpBtn.disabled = true;
         signUpBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
         
@@ -117,11 +127,20 @@ async function signUp() {
             displayName: name
         });
         
-        // Show success message and switch to login form
-        showAuthMessage('Account created successfully! Please sign in.', 'success', 'signup');
+        // Update UI with user's name
+        const userNameElement = document.getElementById('userName');
+        if (userNameElement) {
+            userNameElement.textContent = name;
+        }
+        
+        // Send verification email
+        await userCredential.user.sendEmailVerification();
+        
+        // Show success message and redirect to main content
+        showAuthMessage('Account created successfully! Please verify your email.', 'success', 'signup');
         setTimeout(() => {
-            toggleAuthForm();
-        }, 2000);
+            window.location.href = 'index.html';
+        }, 3000);
         
     } catch (error) {
         console.error('Sign up error:', error);

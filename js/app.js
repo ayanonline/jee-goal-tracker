@@ -689,6 +689,19 @@ function initEventListeners() {
         window.goalForm = newGoalForm;
     }
 
+    // Toggle history section
+    const toggleHistory = document.getElementById('toggleHistory');
+    const historyContent = document.getElementById('historyContent');
+    const historyChevron = document.getElementById('historyChevron');
+    
+    if (toggleHistory && historyContent && historyChevron) {
+        toggleHistory.addEventListener('click', () => {
+            const isHidden = historyContent.style.display === 'none';
+            historyContent.style.display = isHidden ? 'block' : 'none';
+            historyChevron.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0)';
+        });
+    }
+
     // Mark as initialized
     eventListenersInitialized = true;
 

@@ -219,13 +219,23 @@
                     <p class="no-goals">No goals added for today. Click 'Add Today's Goal' to get started!</p>
                 </div>
 
-                <h2>History</h2>
-                <div class="date-filter">
-                    <label for="historyDate">Select Date: </label>
-                    <input type="date" id="historyDate">
+                <br>
+                <hr>
+
+                <div class="history-header"
+                    style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin: 20px 0 10px;"
+                    id="toggleHistory">
+                    <h2 style="margin: 0;">History</h2>
+                    <i class="fas fa-chevron-down" id="historyChevron"></i>
                 </div>
-                <div id="historyGoals">
-                    <p class="no-goals">Select a date to view past goals</p>
+                <div id="historyContent" style="display: none;">
+                    <div class="date-filter">
+                        <label for="historyDate">Select Date: </label>
+                        <input type="date" id="historyDate">
+                    </div>
+                    <div id="historyGoals">
+                        <p class="no-goals">Select a date to view past goals</p>
+                    </div>
                 </div>
             </div>
 

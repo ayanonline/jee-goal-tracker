@@ -49,6 +49,7 @@ async function signIn() {
     const email = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
     const signInBtn = document.querySelector('#loginForm .btn-primary');
+    const originalBtnText = signInBtn ? signInBtn.innerHTML : '<span class="btn-text">Sign In</span><i class="fas fa-arrow-right"></i>';
     
     if (!email || !password) {
         showAuthMessage('Please fill in all fields', 'error', 'login');

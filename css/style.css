@@ -1,16 +1,26 @@
 /* ===== CSS CUSTOM PROPERTIES ===== */
 :root {
     /* Color Palette */
-    --primary-color: #6c63ff;
-    --secondary-color: #4a45b1;
-    --background-color: #121212;
-    --surface-color: #1e1e1e;
+    --primary-color: #ffffff;
+    /* neon white */
+    --secondary-color: #b3b3b3;
+    /* soft grey for contrast */
+    --background-color: #000000;
+    /* pure black background */
+    --surface-color: #111111;
+    /* slightly lighter black for surfaces */
     --text-primary: #ffffff;
-    --text-secondary: #b3b3b3;
-    --success-color: #4caf50;
-    --error-color: #f44336;
-    --warning-color: #ffc107;
-    --border-color: #333;
+    /* white text */
+    --text-secondary: #cccccc;
+    /* dimmed text */
+    --success-color: #39ff14;
+    /* neon green */
+    --error-color: #ff073a;
+    /* neon red */
+    --warning-color: #faff00;
+    /* neon yellow */
+    --border-color: #ffffff;
+    /* white borders */
 
     /* Typography */
     --font-size-xs: 0.8rem;
@@ -77,7 +87,7 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: var(--spacing-md);
-    background: linear-gradient(135deg, #1e1e2f 0%, #2d2d42 100%);
+    background: linear-gradient(135deg, #000000 0%, #0d0d0d 40%, #1a1a1a 100%);
 }
 
 .auth-box {
@@ -91,6 +101,7 @@ body {
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     padding: 30px;
     text-align: center;
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
 }
 
 .auth-forms-wrapper {
@@ -143,7 +154,7 @@ body {
 
 .auth-illustration {
     flex: 1;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    background: linear-gradient(135deg, #000000 0%, #00ffff22 100%);
     padding: 40px;
     display: flex;
     flex-direction: column;
@@ -151,6 +162,7 @@ body {
     align-items: center;
     position: relative;
     overflow: hidden;
+    border-radius: 20px;
 }
 
 .auth-illustration::before {
@@ -294,7 +306,7 @@ select:focus {
 /* ===== BUTTON STYLES ===== */
 .btn {
     background-color: var(--primary-color);
-    color: white;
+    color: rgb(10, 10, 10);
     border: none;
     padding: 12px 24px;
     border-radius: var(--border-radius);
@@ -320,6 +332,7 @@ select:focus {
     font-size: 16px;
     position: relative;
     overflow: hidden;
+    color: black;
 }
 
 .btn-primary:hover {
@@ -601,8 +614,7 @@ h2 {
 .progress-bar {
     width: 100%;
     height: 8px;
-    background-color: var(--border-color);
-    border-radius: 4px;
+    background-color: black;
     overflow: hidden;
     margin-top: var(--spacing-xs);
 }
@@ -1019,6 +1031,7 @@ h2 {
     padding: 12px;
     font-size: 1rem;
     margin-top: 10px;
+    color: black;
 }
 
 .add-goal-btn i {
@@ -1254,12 +1267,13 @@ h2 {
     left: -10px;
     right: -10px;
     bottom: -10px;
-    background: linear-gradient(45deg, #00b4db, #0083b0, #00b4db);
+    background: linear-gradient(45deg, #ffffff, #e6e6e6, #ffffff);
     border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
     z-index: -1;
-    opacity: 0.7;
+    opacity: 0.8;
     animation: wave 8s ease-in-out infinite, pulse 6s infinite;
-    filter: blur(5px);
+    filter: blur(10px);
+    /* soft neon glow */
 }
 
 .about-image::after {
@@ -1269,11 +1283,12 @@ h2 {
     left: -5px;
     right: -5px;
     bottom: -5px;
-    background: linear-gradient(45deg, #00b4db, #0083b0);
+    background: linear-gradient(45deg, #ffffff, #cccccc);
     border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
     z-index: -1;
     opacity: 0.5;
     animation: wave 10s ease-in-out infinite reverse;
+    filter: blur(6px);
 }
 
 .about-image img {
@@ -1281,19 +1296,25 @@ h2 {
     height: 100%;
     object-fit: cover;
     border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 40px rgba(255, 255, 255, 0.6);
+    /* white neon glow */
     transform: rotateY(5deg);
     transition: all 0.8s ease;
-    border: 5px solid rgba(255, 255, 255, 0.1);
+    border: 3px solid rgba(255, 255, 255, 0.3);
     animation: wave 12s ease-in-out infinite;
+    background: #000;
+    /* black base for neon */
 }
 
 .about-image img:hover {
-    transform: rotateY(0) scale(1.02);
-    box-shadow: 0 15px 40px rgba(0, 179, 255, 0.3);
-    border-color: rgba(0, 179, 255, 0.3);
+    transform: rotateY(0) scale(1.05);
+    box-shadow: 0 20px 60px rgba(255, 255, 255, 0.8),
+        0 0 30px rgba(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.6);
     animation-play-state: paused;
 }
+
+
 
 /* ===== FLOATING SHAPES ===== */
 .floating-shapes {

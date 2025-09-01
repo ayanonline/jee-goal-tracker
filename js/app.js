@@ -598,12 +598,13 @@ function updateChartLegend(subjects) {
 // Helper function to get color for each subject
 function getSubjectColor(subject) {
     const colors = {
-        'Physics': '#4e73df',    // Blue
-        'Chemistry': '#1cc88a',  // Green
-        'Mathematics': '#f6c23e' // Yellow
+        'Physics': '#00e5ff',   // icy neon blue
+        'Chemistry': '#00ffa6', // neon aqua green
+        'Mathematics': '#c77dff', // violet neon
     };
-    return colors[subject] || '#858796'; // Default gray color if subject not found
+    return colors[subject] || '#ffffff'; // pure white fallback
 }
+
 
 // Handle adding a new goal
 function handleAddGoal(e) {
@@ -693,7 +694,7 @@ function initEventListeners() {
     const toggleHistory = document.getElementById('toggleHistory');
     const historyContent = document.getElementById('historyContent');
     const historyChevron = document.getElementById('historyChevron');
-    
+
     if (toggleHistory && historyContent && historyChevron) {
         toggleHistory.addEventListener('click', () => {
             const isHidden = historyContent.style.display === 'none';

@@ -124,7 +124,7 @@ class SubjectChart {
             labels.push(subject);
             data.push(subjectTime[subject] || 0);
             backgroundColors.push(this.getSubjectColor(subject));
-            borderColors.push('#1e1e1e');
+            borderColors.push('#f0f0f0');
         });
 
         // If no data at all, show the "No Data" state

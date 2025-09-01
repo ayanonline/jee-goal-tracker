@@ -52,10 +52,24 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--background-color);
-    color: var(--text-primary);
     line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--background-color);
+
+    /* Background image setup */
+    background-image: url('../images/background.jpg');
+    background-size: cover;
+    /* Scale image to cover screen */
+    background-repeat: no-repeat;
+    /* Prevent tiling */
+    background-position: center;
+    /* Keep it centered */
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
 
 /* ===== UTILITY CLASSES ===== */
 .container {
@@ -87,21 +101,24 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: var(--spacing-md);
-    background: linear-gradient(135deg, #000000 0%, #0d0d0d 40%, #1a1a1a 100%);
+
+    /* Background settings */
+    background: url('../images/background.jpg') no-repeat center center;
+    background-size: cover;
 }
+
 
 .auth-box {
     display: flex;
     width: 1000px;
     max-width: 95%;
     min-height: 650px;
-    background: var(--surface-color);
+    background: rgba(0, 0, 0, 0.7);
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     padding: 30px;
     text-align: center;
-    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.4);
 }
 
 .auth-forms-wrapper {
@@ -117,7 +134,7 @@ body {
     width: 100%;
     height: 100%;
     padding: 60px;
-    background: var(--surface-color);
+    background: transparent;
     opacity: 0;
     pointer-events: none;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -125,6 +142,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    border-radius: var(--border-radius);
 }
 
 .auth-form.active {
@@ -407,7 +425,7 @@ header {
     padding: var(--spacing-md) 0;
     border-bottom: 1px solid var(--border-color);
     position: relative;
-    background: var(--background-color);
+    background: transparent;
     z-index: 100;
 }
 
@@ -526,9 +544,9 @@ header p {
     position: absolute;
     right: 0;
     top: 100%;
-    background: var(--surface-color);
+    background: rgba(0, 0, 0, 0.7);
     border-radius: var(--border-radius);
-    box-shadow: var(--box-shadow-hover);
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.2);
     min-width: 220px;
     z-index: 1000;
     overflow: hidden;
@@ -580,6 +598,7 @@ header p {
     margin-right: auto;
     padding: 0 20px;
     position: relative;
+
 }
 
 .main-content::before {
@@ -596,14 +615,14 @@ header p {
 }
 
 .goals-list {
-    background: var(--surface-color);
+    background: rgba(0, 0, 0, 0.7);
     padding: var(--spacing-md);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
 }
 
 .history-list {
-    background: var(--surface-color);
+    background: rgba(0, 0, 0, 0.7);
     padding: var(--spacing-md);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
@@ -635,7 +654,8 @@ h2 {
 .progress-bar {
     width: 100%;
     height: 8px;
-    background-color: black;
+    background-color: #222222;
+    border-radius: 4px;
     overflow: hidden;
     margin-top: var(--spacing-xs);
 }
@@ -651,7 +671,7 @@ h2 {
 /* ===== GOAL CARDS ===== */
 .goal-card,
 .goal-item {
-    background: var(--surface-color);
+    background: transparent;
     border-radius: var(--border-radius);
     padding: 15px;
     margin-bottom: 15px;
@@ -661,6 +681,7 @@ h2 {
     flex-direction: column;
     border-left: 4px solid var(--primary-color);
     animation: fadeIn 0.3s ease-out forwards;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
 .goal-item:hover {
@@ -779,7 +800,7 @@ h2 {
 .chart-container-wrapper {
     width: 100%;
     margin-bottom: 25px;
-    background-color: var(--surface-color);
+    background-color: rgba(0, 0, 0, 0.7);
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     padding: 20px;
@@ -787,7 +808,7 @@ h2 {
 }
 
 .subject-priority-chart {
-    background: var(--surface-color);
+    background: transparent;
     border-radius: var(--border-radius);
     padding: 0;
     margin: 0 0 20px 0;
@@ -1175,7 +1196,7 @@ h2 {
 /* ===== ABOUT PAGE STYLES ===== */
 .about-section {
     padding: var(--spacing-xl) 0;
-    background-color: var(--background-color);
+    background-color: transparent;
     color: var(--text-primary);
 }
 
@@ -1186,7 +1207,7 @@ h2 {
 }
 
 .about-content {
-    background: var(--surface-color);
+    background: rgba(0, 0, 0, 0.7);
     border-radius: var(--border-radius);
     padding: var(--spacing-xl);
     box-shadow: var(--box-shadow);

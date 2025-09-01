@@ -42,17 +42,17 @@ class SubjectChart {
 
         try {
             const ctx = document.getElementById('subjectPriorityChart').getContext('2d');
-            
+
             // Prepare chart data
             const chartData = this.prepareChartData(data);
-            
+
             // Create new chart or update existing one
             if (!this.chart) {
                 this.createChart(ctx, chartData);
             } else {
                 this.updateChart(chartData);
             }
-            
+
             return true;
         } catch (error) {
             console.error('Error updating chart:', error);
@@ -63,26 +63,34 @@ class SubjectChart {
     // Create gradient for each subject
     createGradient(ctx, subject) {
         const gradient = ctx.createLinearGradient(0, 0, 0, 150);
-        
+
         if (subject === 'Physics') {
-            gradient.addColorStop(0, '#5B8FF9');
-            gradient.addColorStop(1, '#1D4ED8');
+            // White core → bright cyan → deep blue
+            gradient.addColorStop(0, '#ffffff');
+            gradient.addColorStop(0.5, '#00e5ff');
+            gradient.addColorStop(1, '#005f99');
         } else if (subject === 'Chemistry') {
-            gradient.addColorStop(0, '#5AD8A6');
-            gradient.addColorStop(1, '#10B981');
+            // White core → neon green → deep teal
+            gradient.addColorStop(0, '#ffffff');
+            gradient.addColorStop(0.5, '#39ff14');
+            gradient.addColorStop(1, '#006633');
         } else { // Mathematics
-            gradient.addColorStop(0, '#F6C54D');
-            gradient.addColorStop(1, '#F59E0B');
+            // White core → violet neon → deep purple
+            gradient.addColorStop(0, '#ffffff');
+            gradient.addColorStop(0.5, '#c77dff');
+            gradient.addColorStop(1, '#4b0082');
         }
-        
+
         return gradient;
     }
-    
+
+
+
     // Prepare chart data from goals
     prepareChartData(goals) {
         // Define all possible subjects in the order we want them to appear
         const allSubjects = ['Physics', 'Chemistry', 'Mathematics'];
-        
+
         // Initialize subjectTime with all possible subjects set to 0
         const subjectTime = {};
         allSubjects.forEach(subject => {
@@ -93,10 +101,10 @@ class SubjectChart {
         if (goals && goals.length > 0) {
             goals.forEach(goal => {
                 if (!goal.completed) return;
-                
+
                 const subject = goal.subject;
                 const time = parseFloat(goal.timeSpent) || 0;
-                
+
                 if (subjectTime.hasOwnProperty(subject)) {
                     subjectTime[subject] += time;
                 } else {
@@ -110,7 +118,7 @@ class SubjectChart {
         const data = [];
         const backgroundColors = [];
         const borderColors = [];
-        
+
         // Always show all subjects, even if time is 0
         allSubjects.forEach(subject => {
             labels.push(subject);
@@ -157,13 +165,13 @@ class SubjectChart {
                         gradientColors.push('#f0f0f0');
                     }
                 });
-                
+
                 // Update the background colors with gradients
                 if (data.datasets && data.datasets.length > 0) {
                     data.datasets[0].backgroundColor = gradientColors;
                 }
             }
-            
+
             this.chart = new Chart(ctx, {
                 type: 'doughnut',
                 data: data,
@@ -190,7 +198,7 @@ class SubjectChart {
                             padding: 12,
                             displayColors: false,
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     const value = context.raw || 0;
                                     return [`${value} hours`];
                                 }
@@ -212,7 +220,7 @@ class SubjectChart {
                     }
                 }
             });
-            
+
             console.log('✅ Chart created successfully');
         } catch (error) {
             console.error('Error creating chart:', error);
@@ -223,12 +231,12 @@ class SubjectChart {
     // Update existing chart
     updateChart(data) {
         if (!this.chart) return;
-        
+
         try {
             // Update gradients when data changes
             const ctx = this.chart.ctx;
             const gradientColors = [];
-            
+
             if (data.labels && data.labels.length > 0) {
                 data.labels.forEach((label, index) => {
                     if (label !== 'No Data') {
@@ -237,13 +245,13 @@ class SubjectChart {
                         gradientColors.push('#f0f0f0');
                     }
                 });
-                
+
                 // Update the background colors with gradients
                 if (data.datasets && data.datasets.length > 0) {
                     data.datasets[0].backgroundColor = gradientColors;
                 }
             }
-            
+
             this.chart.data = data;
             this.chart.update();
             console.log('✅ Chart updated successfully');
@@ -255,13 +263,14 @@ class SubjectChart {
     // Get color for subject (fallback method)
     getSubjectColor(subject) {
         const colors = {
-            'Physics': '#5B8FF9',
-            'Chemistry': '#5AD8A6',
-            'Mathematics': '#F6C54D',
+            'Physics': '#00e5ff',   // icy neon blue
+            'Chemistry': '#00ffa6', // neon aqua green
+            'Mathematics': '#c77dff', // violet neon
         };
-        
-        return colors[subject] || '#f0f0f0';
+
+        return colors[subject] || '#ffffff'; // pure white fallback
     }
+
 
     // Clean up chart resources
     destroy() {

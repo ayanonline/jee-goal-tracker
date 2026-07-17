@@ -230,6 +230,8 @@
             requestPasswordReset();
         });
 
+        getElement("googleSignInBtn")?.addEventListener("click", signInWithGoogle);
+
         getElement("loginForm")?.classList.add("active");
         redirectResetLinksToResetPage();
     }

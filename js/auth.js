@@ -215,35 +215,47 @@
     }
 
     function setupAuthUi() {
-        getElement("switchToSignup")?.addEventListener("click", (event) => {
-            event.preventDefault();
-            toggleAuthForm();
+    getElement("switchToSignup")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        toggleAuthForm();
+    });
+
+    getElement("switchToLogin")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        toggleAuthForm();
+    });
+
+    getElement("forgotPasswordBtn")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        requestPasswordReset();
+    });
+
+    getElement("googleSignInBtn")?.addEventListener("click", signInWithGoogle);
+
+    getElement("loginForm")?.classList.add("active");
+    redirectResetLinksToResetPage();
+
+    getAuth().getRedirectResult()
+        .then((result) => {
+            if (result.user) {
+                console.log("Google Sign-In successful:", result.user);
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            showAuthMessage("Google Sign-In failed.", "error", "login");
         });
+}
 
-        getElement("switchToLogin")?.addEventListener("click", (event) => {
-            event.preventDefault();
-            toggleAuthForm();
-        });
+window.signIn = signIn;
+window.signUp = signUp;
+window.signInWithGoogle = signInWithGoogle;
+window.togglePasswordVisibility = togglePasswordVisibility;
+window.showAuthMessage = showAuthMessage;
 
-        getElement("forgotPasswordBtn")?.addEventListener("click", (event) => {
-            event.preventDefault();
-            requestPasswordReset();
-        });
-
-        getElement("googleSignInBtn")?.addEventListener("click", signInWithGoogle);
-
-        getElement("loginForm")?.classList.add("active");
-        redirectResetLinksToResetPage();
-    }
-
-    window.signIn = signIn;
-    window.signUp = signUp;
-    window.togglePasswordVisibility = togglePasswordVisibility;
-    window.showAuthMessage = showAuthMessage;
-
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", setupAuthUi);
-    } else {
-        setupAuthUi();
-    }
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupAuthUi);
+} else {
+    setupAuthUi();
+}
 })();

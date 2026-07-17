@@ -88,7 +88,7 @@
 
                     <form id="loginFormElement" onsubmit="event.preventDefault(); signIn();">
                         <div id="loginMessage" class="auth-message"></div>
-                        <button type="button" id="googleSignInBtn" class="btn-google">
+                        <button type="button" id="googleLoginBtn" class="btn-google">
                             <img src="https://developers.google.com/identity/images/g-logo.png"
                              alt="Google"
                              width="20"
@@ -135,16 +135,16 @@
                         <p>Join thousands of JEE aspirants</p>
                     </div>
                     
-                    <button type="button" id="googleSignInBtn" class="btn-google">
+                    <form id="signupFormElement" onsubmit="event.preventDefault(); signUp();">
+                        <div id="signupMessage" class="auth-message"></div>
+
+                        <button type="button" id="googleSignupBtn" class="btn-google">
                             <img src="https://developers.google.com/identity/images/g-logo.png"
                              alt="Google"
                              width="20"
                              height="20">
                             <span>Continue with Google</span>
-                    </button>
-
-                    <form id="signupFormElement" onsubmit="event.preventDefault(); signUp();">
-                        <div id="signupMessage" class="auth-message"></div>
+                        </button>
         
                         <div class="btn-text"><br> --or-- </div>
                         <div class="input-group">

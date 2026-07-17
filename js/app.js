@@ -86,28 +86,22 @@ function ensureSignedIn() {
 
 function updateUserUi(user) {
     const userName = byId("userName");
+    const dropdownUserName = byId("dropdownUserName");
     const userEmail = byId("userEmail");
 
+    const name = user.displayName || user.email?.split("@")[0] || "Student";
+
     if (userName) {
-        userName.textContent = user.displayName || user.email?.split("@")[0] || "Student";
+        userName.textContent = name;
+    }
+
+    if (dropdownUserName) {
+        dropdownUserName.textContent = name;
     }
 
     if (userEmail) {
         userEmail.textContent = user.email || "";
     }
-}
-
-function goalDate(goal) {
-    if (typeof goal.date === "string") return goal.date;
-    if (goal.date?.toDate) return goal.date.toDate().toISOString().split("T")[0];
-    return todayIso();
-}
-
-function goalTimestamp(goal) {
-    if (goal.updatedAt?.toDate) return goal.updatedAt.toDate().getTime();
-    if (goal.createdAt?.toDate) return goal.createdAt.toDate().getTime();
-    if (goal.timestamp?.toDate) return goal.timestamp.toDate().getTime();
-    return 0;
 }
 
 async function getUserGoals() {

@@ -103,6 +103,28 @@
             restoreButton();
         }
     }
+    
+    async function signInWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    try {
+        await getAuth().signInWithPopup(provider);
+    } catch (error) {
+        console.error(error);
+
+        const messages = {
+            "auth/popup-closed-by-user": "Sign-in cancelled.",
+            "auth/account-exists-with-different-credential":
+                "An account already exists with this email using another sign-in method."
+        };
+
+        showAuthMessage(
+            messages[error.code] || "Google sign-in failed.",
+            "error",
+            "login"
+        );
+    }
+    }
 
     async function signUp() {
         const name = getElement("signupName")?.value.trim() || "";

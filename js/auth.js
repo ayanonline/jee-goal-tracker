@@ -108,7 +108,7 @@
     const provider = new firebase.auth.GoogleAuthProvider();
 
     try {
-        await getAuth().signInWithPopup(provider);
+        await getAuth().signInWithRedirect(provider);
     } catch (error) {
         console.error(error);
 

@@ -104,6 +104,19 @@ function updateUserUi(user) {
     }
 }
 
+function goalDate(goal) {
+    if (typeof goal.date === "string") return goal.date;
+    if (goal.date?.toDate) return goal.date.toDate().toISOString().split("T")[0];
+    return todayIso();
+}
+
+function goalTimestamp(goal) {
+    if (goal.updatedAt?.toDate) return goal.updatedAt.toDate().getTime();
+    if (goal.createdAt?.toDate) return goal.createdAt.toDate().getTime();
+    if (goal.timestamp?.toDate) return goal.timestamp.toDate().getTime();
+    return 0;
+}
+
 async function getUserGoals() {
     const snapshot = await appState.db
         .collection("goals")

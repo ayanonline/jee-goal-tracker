@@ -218,6 +218,7 @@
     }
 
     function setupAuthUi() {
+
     getElement("switchToSignup")?.addEventListener("click", (event) => {
         event.preventDefault();
         toggleAuthForm();
@@ -233,21 +234,22 @@
         requestPasswordReset();
     });
 
-    getElement("googleSignInBtn")?.addEventListener("click", signInWithGoogle);
+    // Google Login Button
+    getElement("googleLoginBtn")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        signInWithGoogle();
+    });
+
+    // Google Signup Button
+    getElement("googleSignupBtn")?.addEventListener("click", (event) => {
+        event.preventDefault();
+        signInWithGoogle();
+    });
 
     getElement("loginForm")?.classList.add("active");
+
     redirectResetLinksToResetPage();
 
-    getAuth().getRedirectResult()
-        .then((result) => {
-            if (result.user) {
-                console.log("Google Sign-In successful:", result.user);
-            }
-        })
-        .catch((error) => {
-            console.error(error);
-            showAuthMessage("Google Sign-In failed.", "error", "login");
-        });
 }
 
 window.signIn = signIn;

@@ -111,20 +111,22 @@
         const result = await getAuth().signInWithPopup(provider);
         console.log(result.user);
     } catch (error) {
-        console.error(error);
+    console.log("ERROR CODE:", error.code);
+    console.log("ERROR MESSAGE:", error.message);
+    console.log(error);
 
-        const messages = {
-            "auth/popup-closed-by-user": "Sign-in cancelled.",
-            "auth/account-exists-with-different-credential":
-                "An account already exists with this email using another sign-in method."
-        };
+    const messages = {
+        "auth/popup-closed-by-user": "Sign-in cancelled.",
+        "auth/account-exists-with-different-credential":
+            "An account already exists with this email using another sign-in method."
+    };
 
-        showAuthMessage(
-            messages[error.code] || "Google sign-in failed.",
-            "error",
-            "login"
-        );
-    }
+    showAuthMessage(
+        messages[error.code] || "Google sign-in failed.",
+        "error",
+        "login"
+    );
+}
     }
 
     async function signUp() {

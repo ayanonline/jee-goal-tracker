@@ -134,16 +134,18 @@
                         <h2>Create Account</h2>
                         <p>Join thousands of JEE aspirants</p>
                     </div>
-
-                    <form id="signupFormElement" onsubmit="event.preventDefault(); signUp();">
-                        <div id="signupMessage" class="auth-message"></div>
-                        <button type="button" id="googleSignInBtn" class="btn-google">
+                    
+                    <button type="button" id="googleSignInBtn" class="btn-google">
                             <img src="https://developers.google.com/identity/images/g-logo.png"
                              alt="Google"
                              width="20"
                              height="20">
                             <span>Continue with Google</span>
-                        </button>
+                    </button>
+
+                    <form id="signupFormElement" onsubmit="event.preventDefault(); signUp();">
+                        <div id="signupMessage" class="auth-message"></div>
+        
                         <div class="btn-text"><br> --or-- </div>
                         <div class="input-group">
                             <input type="text" id="signupName" placeholder="Full Name" required>

@@ -541,6 +541,44 @@ CTA
     color: #2563eb;
     box-shadow: none;
 }
+/* Hide mobile button on desktop */
+.mobile-signin{
+    display:none;
+}
+
+/* Desktop button */
+.desktop-signin{
+    display:inline-flex;
+}
+
+/* Mobile */
+@media (max-width:992px){
+
+    .navbar{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    /* Show mobile Sign In */
+    .mobile-signin{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding:10px 20px;
+        border-radius:50px;
+        background:linear-gradient(135deg,#2563eb,#7c3aed);
+        color:#fff;
+        text-decoration:none;
+        font-weight:600;
+        box-shadow:0 8px 20px rgba(37,99,235,.35);
+    }
+
+    /* Hide desktop navigation */
+    .navbar ul{
+        display:none;
+    }
+}
 
 /* =========================
 FOOTER

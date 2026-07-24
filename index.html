@@ -21,11 +21,11 @@
     <meta name="theme-color"
         content="#050816">
 
-    <meta name="mobile-web-app-capable"
-        content="yes">
-
     <meta name="application-name"
         content="PreTrack">
+
+    <meta name="mobile-web-app-capable"
+        content="yes">
 
     <meta name="apple-mobile-web-app-capable"
         content="yes">
@@ -39,9 +39,6 @@
     <meta name="msapplication-TileColor"
         content="#050816">
 
-    <meta name="msapplication-TileImage"
-        content="favicon/ms-icon-144x144.png">
-
     <!-- =========================
          SEO
     ========================== -->
@@ -51,16 +48,19 @@
     </title>
 
     <meta name="description"
-        content="PreTrack is a free study planner that helps students set goals, track progress, build study streaks, analyze performance, and prepare smarter for JEE, NEET, WBJEE, CUET, board exams, and more.">
+        content="PreTrack is a smart study planner that helps students organize study schedules, track progress, build study streaks, and prepare effectively for JEE, NEET, WBJEE, CUET, board exams, and more.">
 
     <meta name="keywords"
-        content="study planner, exam tracker, JEE planner, NEET planner, WBJEE, CUET, board exams, study analytics, revision planner, productivity">
+        content="study planner, exam planner, JEE, NEET, WBJEE, CUET, board exams, productivity, study tracker">
 
     <meta name="author"
         content="PreTrack">
 
     <meta name="robots"
-        content="index, follow">
+        content="index,follow">
+
+    <meta name="googlebot"
+        content="index,follow,max-image-preview:large">
 
     <link rel="canonical"
         href="https://pretrack.onrender.com/">
@@ -75,8 +75,11 @@
     <meta property="og:site_name"
         content="PreTrack">
 
+    <meta property="og:locale"
+        content="en_US">
+
     <meta property="og:title"
-        content="PreTrack | Smart Study Planner">
+        content="PreTrack | Smart Study Planner & Exam Preparation Tracker">
 
     <meta property="og:description"
         content="Plan smarter, stay consistent, and achieve your academic goals with PreTrack.">
@@ -86,6 +89,9 @@
 
     <meta property="og:image"
         content="https://pretrack.onrender.com/images/banner.png">
+
+    <meta property="og:image:alt"
+        content="PreTrack Dashboard">
 
     <!-- =========================
          TWITTER
@@ -103,38 +109,44 @@
     <meta name="twitter:image"
         content="https://pretrack.onrender.com/images/banner.png">
 
+    <!-- Uncomment after creating an X account -->
+    <!--
+    <meta name="twitter:site"
+          content="@pretrack001">
+    -->
+
     <!-- =========================
          PWA
     ========================== -->
 
     <link rel="manifest"
-        href="favicon/manifest.json">
+        href="/favicon/manifest.json">
 
     <!-- =========================
          ICONS
     ========================== -->
 
     <link rel="icon"
-        href="favicon/favicon.ico">
+        href="/favicon/favicon.ico">
 
     <link rel="icon"
         type="image/png"
         sizes="32x32"
-        href="favicon/favicon-32x32.png">
+        href="/favicon/favicon-32x32.png">
 
     <link rel="icon"
         type="image/png"
         sizes="192x192"
-        href="favicon/android-icon-192x192.png">
+        href="/favicon/android-icon-192x192.png">
 
     <link rel="icon"
         type="image/png"
         sizes="512x512"
-        href="favicon/android-icon-512x512.png">
+        href="/favicon/android-icon-512x512.png">
 
     <link rel="apple-touch-icon"
         sizes="180x180"
-        href="favicon/apple-icon-180x180.png">
+        href="/favicon/apple-icon-180x180.png">
 
     <!-- =========================
          GOOGLE FONTS
@@ -158,20 +170,50 @@
         href="style.css">
 
     <!-- =========================
-         JSON-LD
+         STRUCTURED DATA
     ========================== -->
+
+    <!-- Web Application -->
 
     <script type="application/ld+json">
 {
-    "@context":"https://schema.org",
-    "@type":"WebApplication",
-    "name":"PreTrack",
-    "url":"https://pretrack.onrender.com/",
-    "applicationCategory":"EducationalApplication",
-    "operatingSystem":"Web",
-    "description":"Smart study planner and exam preparation tracker for students preparing for competitive and board examinations."
+  "@context":"https://schema.org",
+  "@type":"WebApplication",
+  "name":"PreTrack",
+  "url":"https://pretrack.onrender.com/",
+  "applicationCategory":"EducationalApplication",
+  "operatingSystem":"Web",
+  "description":"Smart study planner and exam preparation tracker for students preparing for competitive and board examinations."
 }
-</script>
+    </script>
+
+    <!-- Website -->
+
+    <script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"PreTrack",
+  "alternateName":"PreTrack Study Planner",
+  "url":"https://pretrack.onrender.com/"
+}
+    </script>
+
+    <!-- Organization -->
+
+    <script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"Organization",
+  "name":"PreTrack",
+  "url":"https://pretrack.onrender.com/",
+  "logo":"https://pretrack.onrender.com/images/logo1.png",
+  "sameAs":[
+    "https://www.instagram.com/pretrack001/",
+    "https://x.com/pretrack001"
+  ]
+}
+    </script>
 
     <!-- =========================
          JAVASCRIPT
@@ -181,7 +223,6 @@
         src="script.js"></script>
 
 </head>
-
 <body>
 
     <!-- Skip Link -->
